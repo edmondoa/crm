@@ -1,0 +1,276 @@
+/* =========================================================
+   ACTIVITIES
+========================================================= */
+
+.activity-filters {
+    display: grid;
+
+    grid-template-columns:
+        minmax(250px, 1fr)
+        170px
+        170px
+        160px
+        auto;
+
+    gap: 14px;
+
+    align-items: end;
+
+    margin-bottom: 24px;
+}
+
+.activity-table-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.activity-type-icon {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #f3f4f6;
+
+    color: #374151;
+
+    font-size: 15px;
+}
+
+.activity-type-call {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.activity-type-email {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+.activity-type-meeting {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.activity-type-site_visit {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.activity-type-note {
+    background: #f9fafb;
+    color: #4b5563;
+}
+
+.activity-type-sms {
+    background: #ecfeff;
+    color: #0891b2;
+}
+
+.activity-location {
+    margin-top: 4px;
+
+    color: #6b7280;
+
+    font-size: 11px;
+}
+
+.activity-date {
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.activity-time {
+    margin-top: 2px;
+
+    color: #6b7280;
+
+    font-size: 11px;
+}
+
+.activity-priority {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 4px 8px;
+
+    border-radius: 4px;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.activity-priority-low {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.activity-priority-normal {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.activity-priority-high {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.status-planned {
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   ACTIVITY TIMELINE
+========================================================= */
+
+.activity-timeline-item {
+    display: flex;
+
+    gap: 14px;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.activity-timeline-item:first-child {
+    padding-top: 0;
+}
+
+.activity-timeline-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.activity-timeline-icon {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 14px;
+}
+
+.activity-timeline-content {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.activity-timeline-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.activity-timeline-meta {
+    margin-top: 4px;
+
+    color: #6b7280;
+
+    font-size: 11px;
+}
+
+.activity-timeline-description {
+    margin-top: 8px;
+
+    color: #374151;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+.activity-related-item {
+    padding: 14px 0;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.activity-related-item:first-child {
+    padding-top: 0;
+}
+
+.activity-related-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.activity-related-meta {
+    margin-top: 4px;
+
+    color: #6b7280;
+
+    font-size: 12px;
+}
+
+.activity-description {
+    color: #374151;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+@media (max-width: 1200px) {
+
+    .activity-filters {
+        grid-template-columns:
+            1fr
+            1fr
+            1fr;
+    }
+
+    .activity-filters .filter-search {
+        grid-column: 1 / -1;
+    }
+
+    .activity-filters .filter-actions {
+        grid-column: 1 / -1;
+
+        justify-content: flex-start;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .activity-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .activity-filters .filter-search {
+        grid-column: auto;
+    }
+
+    .activity-filters .filter-actions {
+        grid-column: auto;
+    }
+
+    .activity-timeline-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+}

@@ -1,0 +1,405 @@
+/* =========================================================
+   EMPLOYEE / JOB ASSIGNMENT
+   ========================================================= */
+
+.erp-card {
+    background: #fff;
+    border: 1px solid #e4e7ec;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+}
+
+.erp-card-header {
+    min-height: 64px;
+    padding: 18px 22px;
+    border-bottom: 1px solid #eaecf0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.erp-card-body {
+    padding: 22px;
+}
+
+.erp-card-title {
+    color: #101828;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.erp-card-subtitle {
+    margin-top: 3px;
+    color: #667085;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.page-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 8px;
+
+    color: #98a2b3;
+    font-size: 12px;
+}
+
+.page-breadcrumb a {
+    color: #667085;
+    text-decoration: none;
+}
+
+.page-breadcrumb a:hover {
+    color: #344054;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.erp-form-section {
+    margin-bottom: 30px;
+    padding-bottom: 26px;
+
+    border-bottom: 1px solid #eaecf0;
+}
+
+.erp-form-section:last-of-type {
+    margin-bottom: 0;
+    border-bottom: 0;
+}
+
+.erp-form-section-title {
+    margin-bottom: 4px;
+
+    color: #101828;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.erp-form-section-subtitle {
+    margin-bottom: 18px;
+
+    color: #667085;
+    font-size: 13px;
+}
+
+.erp-form-actions {
+    padding-top: 20px;
+    border-top: 1px solid #eaecf0;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+}
+
+
+/* =========================================================
+   EMPLOYEE AVATAR
+   ========================================================= */
+
+.erp-employee-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.erp-avatar {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f2f4f7;
+    color: #344054;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.erp-employee-name {
+    color: #101828;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.erp-table-meta {
+    margin-top: 2px;
+
+    color: #667085;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.erp-table {
+    color: #344054;
+    font-size: 13px;
+}
+
+.erp-table thead th {
+    padding: 13px 16px;
+
+    background: #f9fafb;
+    border-bottom: 1px solid #eaecf0;
+
+    color: #475467;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: .04em;
+
+    white-space: nowrap;
+}
+
+.erp-table tbody td {
+    padding: 15px 16px;
+
+    vertical-align: middle;
+
+    border-bottom: 1px solid #f2f4f7;
+}
+
+.erp-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.erp-table tbody tr:hover {
+    background: #fcfcfd;
+}
+
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.erp-info-label {
+    margin-bottom: 5px;
+
+    color: #667085;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.erp-info-value {
+    color: #101828;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   DETAIL LIST
+   ========================================================= */
+
+.erp-detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.erp-detail-row {
+    padding: 12px 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 1px solid #f2f4f7;
+
+    gap: 20px;
+}
+
+.erp-detail-row:last-child {
+    border-bottom: 0;
+}
+
+.erp-detail-row span {
+    color: #667085;
+    font-size: 13px;
+}
+
+.erp-detail-row strong {
+    color: #101828;
+    font-size: 13px;
+    text-align: right;
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+.employee-profile {
+    text-align: center;
+}
+
+.employee-profile-avatar {
+    width: 78px;
+    height: 78px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f2f4f7;
+    color: #344054;
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.employee-profile-name {
+    margin: 0;
+
+    color: #101828;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.employee-profile-position {
+    margin-top: 4px;
+
+    color: #667085;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   CHECKBOX
+   ========================================================= */
+
+.erp-checkbox-card {
+    min-height: 42px;
+
+    padding: 10px 12px;
+
+    border: 1px solid #d0d5dd;
+    border-radius: 7px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+}
+
+.erp-checkbox-card:hover {
+    background: #f9fafb;
+}
+
+.erp-checkbox-card .form-check-input {
+    margin-top: 3px;
+}
+
+.erp-checkbox-card .form-check-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    cursor: pointer;
+}
+
+.erp-checkbox-card strong {
+    color: #344054;
+    font-size: 13px;
+}
+
+.erp-checkbox-card span {
+    color: #667085;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.erp-empty-state {
+    padding: 60px 30px;
+    text-align: center;
+}
+
+.erp-empty-icon {
+    width: 54px;
+    height: 54px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f2f4f7;
+    color: #667085;
+
+    font-size: 22px;
+}
+
+.erp-empty-state h5 {
+    margin-bottom: 5px;
+
+    color: #101828;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.erp-empty-state p {
+    margin-bottom: 18px;
+
+    color: #667085;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   ALERT
+   ========================================================= */
+
+.erp-alert {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.erp-pagination {
+    padding: 16px 20px;
+
+    border-top: 1px solid #eaecf0;
+}

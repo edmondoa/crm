@@ -1,0 +1,306 @@
+/* =========================================================
+   JOBS / WORK ORDERS
+========================================================= */
+
+.job-filters {
+    display: grid;
+
+    grid-template-columns:
+        minmax(260px, 1fr)
+        220px
+        180px
+        170px
+        160px
+        auto;
+
+    gap: 14px;
+
+    align-items: end;
+}
+
+.job-filters .filter-search {
+    min-width: 0;
+}
+
+.job-filters .filter-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.job-table-name {
+    min-width: 230px;
+}
+
+.job-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 5px 9px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 5px;
+
+    background: #f9fafb;
+    color: #374151;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.job-type-badge i {
+    color: #6b7280;
+}
+
+.job-date {
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.job-time {
+    margin-top: 2px;
+
+    color: #6b7280;
+
+    font-size: 11px;
+}
+
+.job-overdue {
+    color: #b91c1c;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.job-overdue-label {
+    margin-top: 3px;
+
+    color: #b91c1c;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.job-priority {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.job-priority-low {
+    color: #6b7280;
+}
+
+.job-priority-normal {
+    color: #374151;
+}
+
+.job-priority-high {
+    color: #b45309;
+}
+
+.job-priority-urgent {
+    color: #b91c1c;
+}
+
+
+/* Status */
+
+.status-draft {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.status-scheduled {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-in-progress {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+.status-on-hold {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-cancelled {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+
+/* Header */
+
+.job-header-code {
+    margin-bottom: 5px;
+
+    color: #6b7280;
+
+    font-family: monospace;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    letter-spacing: .03em;
+}
+
+
+/* Profile */
+
+.job-profile {
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    padding-bottom: 24px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.job-profile-icon {
+    width: 60px;
+    height: 60px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 24px;
+}
+
+.job-profile-name {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+.job-profile-code {
+    margin-top: 5px;
+
+    color: #6b7280;
+
+    font-family: monospace;
+    font-size: 12px;
+}
+
+
+/* Description */
+
+.job-description {
+    color: #374151;
+
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+
+/* Financial */
+
+.job-amount {
+    color: #111827;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+
+/* Context */
+
+.job-context-item {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.job-context-item:first-child {
+    padding-top: 0;
+}
+
+.job-context-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.job-context-icon {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #f8fafc;
+    color: #64748b;
+
+    font-size: 15px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 1500px) {
+
+    .job-filters {
+        grid-template-columns:
+            1fr 1fr 1fr;
+    }
+
+    .job-filters .filter-search {
+        grid-column: 1 / -1;
+    }
+
+    .job-filters .filter-actions {
+        grid-column: 1 / -1;
+
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .job-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .job-filters .filter-search,
+    .job-filters .filter-actions {
+        grid-column: auto;
+    }
+
+    .job-profile {
+        align-items: flex-start;
+    }
+
+}

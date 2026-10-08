@@ -1,0 +1,248 @@
+/* =========================================================
+   CONTACTS
+   ========================================================= */
+
+.contact-filters {
+    grid-template-columns:
+        minmax(250px, 1fr)
+        230px
+        170px
+        160px
+        auto;
+}
+
+
+/* =========================================================
+   CONTACT TABLE
+   ========================================================= */
+
+.contact-table-name {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    min-width: 180px;
+}
+
+.contact-job-title {
+    color: #111827;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.contact-department {
+    margin-top: 3px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.contact-info-line {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 4px;
+    color: #4b5563;
+    font-size: 12px;
+}
+
+.contact-info-line:last-child {
+    margin-bottom: 0;
+}
+
+.contact-info-line i {
+    width: 15px;
+    color: #6b7280;
+    text-align: center;
+}
+
+
+/* =========================================================
+   PRIMARY CONTACT
+   ========================================================= */
+
+.contact-primary-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    background: #fff7ed;
+    color: #c2410c;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.contact-primary-badge i {
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   CONTACT PROFILE
+   ========================================================= */
+
+.contact-profile-title {
+    margin-top: 5px;
+    color: #4b5563;
+    font-size: 13px;
+}
+
+.contact-primary-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #f9fafb;
+}
+
+.contact-primary-option .form-check-input {
+    margin-top: 3px;
+}
+
+.contact-primary-option .form-check-label {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    color: #111827;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.contact-primary-option .form-check-label span {
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.crm-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    background: #f9fafb;
+    color: #374151;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ALERT
+   ========================================================= */
+
+.crm-alert {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   DANGER ZONE
+   ========================================================= */
+
+.danger-zone {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.danger-zone-title {
+    color: #991b1b;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.danger-zone-description {
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+    padding: 20px;
+    text-align: center;
+}
+
+.empty-state > i {
+    display: block;
+    margin-bottom: 12px;
+    color: #9ca3af;
+    font-size: 34px;
+}
+
+.empty-state h5 {
+    margin-bottom: 6px;
+    color: #374151;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.empty-state p {
+    margin-bottom: 18px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .contact-filters {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .contact-filters .filter-search {
+        grid-column: 1 / -1;
+    }
+
+    .contact-filters .filter-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .contact-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-filters .filter-search {
+        grid-column: auto;
+    }
+
+    .contact-filters .filter-actions {
+        grid-column: auto;
+    }
+
+    .danger-zone {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .danger-zone .btn {
+        width: 100%;
+    }
+}

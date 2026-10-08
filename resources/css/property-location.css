@@ -1,0 +1,177 @@
+/* =========================================================
+   PROPERTY LOCATIONS
+========================================================= */
+
+.property-location-filters {
+    display: grid;
+    grid-template-columns:
+        minmax(250px, 1fr)
+        250px
+        170px
+        150px
+        auto;
+
+    gap: 14px;
+    align-items: end;
+
+    margin-bottom: 24px;
+}
+
+.location-address {
+    color: #374151;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.location-primary-badge {
+    display: inline-flex;
+    align-items: center;
+
+    margin-top: 5px;
+    padding: 3px 7px;
+
+    border-radius: 4px;
+
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+
+    color: #92400e;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: .03em;
+}
+
+.property-location-profile {
+    padding: 10px 0 24px;
+
+    text-align: center;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.property-location-icon {
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 26px;
+}
+
+.property-location-profile-name {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+.property-location-profile-code {
+    margin-top: 6px;
+
+    color: #6b7280;
+
+    font-family: monospace;
+
+    font-size: 12px;
+}
+
+.property-location-address-card {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 18px;
+
+    padding: 8px 0;
+}
+
+.property-location-address-icon {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #f3f4f6;
+
+    color: #374151;
+
+    font-size: 20px;
+}
+
+.property-location-address-line {
+    color: #111827;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    line-height: 1.7;
+}
+
+.property-location-address-county {
+    margin-top: 5px;
+
+    color: #6b7280;
+
+    font-size: 12px;
+}
+
+@media (max-width: 1200px) {
+
+    .property-location-filters {
+        grid-template-columns:
+            1fr
+            1fr
+            1fr;
+    }
+
+    .property-location-filters .filter-search {
+        grid-column: 1 / -1;
+    }
+
+    .property-location-filters .filter-actions {
+        grid-column: 1 / -1;
+
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .property-location-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .property-location-filters .filter-search {
+        grid-column: auto;
+    }
+
+    .property-location-filters .filter-actions {
+        grid-column: auto;
+    }
+
+    .property-location-address-card {
+        flex-direction: column;
+    }
+}

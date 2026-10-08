@@ -1,0 +1,221 @@
+/* =========================================================
+   PROPERTIES
+   ========================================================= */
+
+.property-filters {
+    display: grid;
+    grid-template-columns:
+        minmax(250px, 1fr)
+        230px
+        180px
+        160px
+        auto;
+    gap: 14px;
+    align-items: end;
+    margin-bottom: 24px;
+}
+
+.property-table-name {
+    min-width: 190px;
+}
+
+.property-type-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    background: #f9fafb;
+    color: #374151;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.property-contact-role {
+    margin-top: 3px;
+    color: #6b7280;
+    font-size: 11px;
+}
+
+.property-code-value {
+    font-family: monospace;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   PROPERTY PROFILE
+   ========================================================= */
+
+.property-profile {
+    padding: 10px 0 24px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.property-profile-icon {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+    background: #eff6ff;
+
+    color: #2563eb;
+    font-size: 26px;
+}
+
+.property-profile-name {
+    margin: 0;
+    color: #111827;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.property-profile-code {
+    margin-top: 6px;
+    color: #6b7280;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.property-profile-type {
+    margin-top: 10px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   PROPERTY CONTACT
+   ========================================================= */
+
+.property-contact-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.property-contact-avatar {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #eff6ff;
+
+    color: #2563eb;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.property-contact-content {
+    min-width: 0;
+}
+
+.property-contact-name {
+    color: #111827;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.property-contact-name:hover {
+    color: #2563eb;
+}
+
+.property-contact-detail {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 5px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.property-contact-detail i {
+    width: 15px;
+    text-align: center;
+}
+
+
+/* =========================================================
+   PROPERTY LOCATION PLACEHOLDER
+   ========================================================= */
+
+.property-coming-soon {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+}
+
+.property-coming-soon > i {
+    flex-shrink: 0;
+
+    color: #6b7280;
+    font-size: 22px;
+}
+
+.property-coming-soon strong {
+    color: #374151;
+    font-size: 13px;
+}
+
+.property-coming-soon p {
+    margin: 4px 0 0;
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .property-filters {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .property-filters .filter-search {
+        grid-column: 1 / -1;
+    }
+
+    .property-filters .filter-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .property-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .property-filters .filter-search {
+        grid-column: auto;
+    }
+
+    .property-filters .filter-actions {
+        grid-column: auto;
+    }
+
+    .property-contact-card {
+        flex-direction: column;
+    }
+
+}

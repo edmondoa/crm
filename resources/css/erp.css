@@ -1,0 +1,334 @@
+/* =========================================================
+   CRM FOUNDATION
+========================================================= */
+
+.erp-page {
+    width: 100%;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
+    width: 100%;
+}
+
+.page-header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+    margin: 0.35rem 0 0;
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.page-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.erp-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    min-height: 118px;
+    padding: 1.25rem;
+
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 0.75rem;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.erp-stat-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.06);
+}
+
+.erp-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    flex: 0 0 46px;
+
+    border-radius: 0.65rem;
+
+    background: #f1f3f5;
+
+    font-size: 1.25rem;
+}
+
+.erp-stat-content {
+    min-width: 0;
+}
+
+.erp-stat-label {
+    color: #6c757d;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.erp-stat-value {
+    margin-top: 0.15rem;
+
+    font-size: 1.65rem;
+    line-height: 1.2;
+    font-weight: 650;
+}
+
+.erp-stat-meta {
+    margin-top: 0.25rem;
+
+    color: #8a8f98;
+    font-size: 0.75rem;
+}
+
+
+/* =========================================================
+   ERP CARD
+========================================================= */
+
+.erp-card {
+    border: 1px solid #e9ecef;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.erp-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 1rem 1.15rem;
+
+    background: #ffffff;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.erp-card-header .card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ERP TABLE
+========================================================= */
+
+.erp-table {
+    --bs-table-bg: transparent;
+}
+
+.erp-table thead th {
+    padding: 0.8rem 1rem;
+
+    background: #f8f9fa;
+
+    border-bottom: 1px solid #e9ecef;
+
+    color: #6c757d;
+
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+
+    white-space: nowrap;
+}
+
+.erp-table tbody td {
+    padding: 0.9rem 1rem;
+
+    border-bottom: 1px solid #f0f1f3;
+
+    vertical-align: middle;
+
+    font-size: 0.875rem;
+}
+
+.erp-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.erp-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 250px;
+
+    padding: 2rem;
+
+    text-align: center;
+}
+
+.erp-empty-state.compact {
+    min-height: 220px;
+}
+
+.erp-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 0.85rem;
+
+    border-radius: 50%;
+
+    background: #f1f3f5;
+
+    color: #6c757d;
+
+    font-size: 1.2rem;
+}
+
+.erp-empty-state h6 {
+    margin-bottom: 0.35rem;
+
+    font-weight: 600;
+}
+
+.erp-empty-state p {
+    max-width: 300px;
+
+    margin: 0;
+
+    color: #8a8f98;
+
+    font-size: 0.8rem;
+}
+
+
+/* =========================================================
+   CRM MODULE CARDS
+========================================================= */
+
+.crm-module-card {
+    display: flex;
+    gap: 1rem;
+
+    height: 100%;
+
+    padding: 1.15rem;
+
+    background: #ffffff;
+
+    border: 1px solid #e9ecef;
+    border-radius: 0.75rem;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+}
+
+.crm-module-card:hover {
+    transform: translateY(-1px);
+
+    border-color: #d8dce1;
+
+    box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.05);
+}
+
+.crm-module-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    border-radius: 0.6rem;
+
+    background: #f1f3f5;
+
+    font-size: 1.1rem;
+}
+
+.crm-module-content {
+    min-width: 0;
+}
+
+.crm-module-content h6 {
+    margin-bottom: 0.3rem;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.crm-module-content p {
+    margin-bottom: 0.6rem;
+
+    color: #6c757d;
+
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .page-header-row {
+        flex-direction: column;
+    }
+
+    .page-actions {
+        width: 100%;
+    }
+
+    .page-actions .btn {
+        width: 100%;
+    }
+
+    .erp-stat-card {
+        min-height: 100px;
+        padding: 1rem;
+    }
+
+    .erp-stat-value {
+        font-size: 1.4rem;
+    }
+
+}
