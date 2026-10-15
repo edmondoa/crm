@@ -15,7 +15,8 @@ use App\Http\Controllers\Crm\JobScheduleController;
 use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
-
+use App\Http\Controllers\LeadController;
+use App\Http\Controllers\OpportunityController;
 Route::get('/', function () {
     return redirect()->route('crm.dashboard');
 });
@@ -216,5 +217,22 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
 
     Route::resource('payments', PaymentController::class)
     ->except(['edit', 'update', 'destroy']);
- 
+    
+
+    Route::resource('leads', LeadController::class);
+
+    Route::post('leads/{lead}/convert', [
+        LeadController::class, 'convert'
+    ])->name('leads.convert');
+
+    Route::get('opportunities/pipeline', [
+        OpportunityController::class, 'pipeline'
+    ])->name('opportunities.pipeline');
+
+    Route::patch('opportunities/{opportunity}/stage', [
+        OpportunityController::class, 'updateStage'
+    ])->name('opportunities.stage');
+
+    Route::resource('opportunities', OpportunityController::class);
+
 });

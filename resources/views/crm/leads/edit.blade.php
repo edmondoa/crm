@@ -1,0 +1,1 @@
+@extends('crm.leads.form')

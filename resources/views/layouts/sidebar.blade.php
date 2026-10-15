@@ -20,14 +20,21 @@
         Sales
     </div>
 
-    <a href="#" class="sidebar-link disabled">
+    <a href="{{ route('crm.leads.index') }}" class="sidebar-link "
+        {{ request()->routeIs('crm.leads.*') ? 'active' : '' }}>
         <i class="bi bi-person-plus"></i>
         <span>Leads</span>
     </a>
 
-    <a href="#" class="sidebar-link disabled">
+    <a href="{{ route('crm.opportunities.index') }}" class="sidebar-link " 
+        {{ request()->routeIs('crm.opportunities.*') ? 'active' : '' }}>
         <i class="bi bi-funnel"></i>
         <span>Opportunities</span>
+    </a>
+    <a href="{{ route('crm.opportunities.pipeline') }}" class="sidebar-link 
+        {{ request()->routeIs('opportunities.pipeline') ? 'active' : '' }}">
+        <i class="bi bi-kanban"></i>
+        <span>Sales Pipeline</span>
     </a>
 
     <a href="#" class="sidebar-link disabled">
