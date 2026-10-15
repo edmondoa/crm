@@ -66,6 +66,11 @@ class Property extends Model
         );
     }
 
+    public function jobs(): HasMany
+    {
+        return $this->hasMany(Job::class);
+    }
+
     /**
      * Search properties.
      */

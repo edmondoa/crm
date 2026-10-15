@@ -14,6 +14,7 @@ use App\Http\Controllers\Crm\JobAssignmentController;
 use App\Http\Controllers\Crm\JobScheduleController;
 use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return redirect()->route('crm.dashboard');
@@ -212,5 +213,8 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
         'invoices',
         InvoiceController::class
     );
+
+    Route::resource('payments', PaymentController::class)
+    ->except(['edit', 'update', 'destroy']);
  
 });

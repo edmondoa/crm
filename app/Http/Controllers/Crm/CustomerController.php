@@ -198,6 +198,13 @@ class CustomerController extends Controller
                     ->latest('scheduled_start_at')
                     ->limit(10);
             },
+            'invoices' => function ($query) {
+                $query->latest('created_at');
+            },
+            // 'payments' => function ($query) {
+            //     $query->with('invoice')
+            //         ->latest('payment_date');
+            // },
         ]);
 
         return view(

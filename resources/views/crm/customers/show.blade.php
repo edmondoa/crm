@@ -573,6 +573,30 @@
                 </button>
 
             </li>
+            
+            {{-- Invoices --}}
+            <li class="nav-item" role="presentation">
+
+                <button
+                    class="nav-link"
+                    id="invoices-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#invoices-pane"
+                    type="button"
+                    role="tab"
+                    aria-controls="invoices-pane"
+                    aria-selected="false"
+                >
+
+                    <i class="bi bi-receipt me-1"></i>
+
+                    Invoices
+
+                    <span class="badge bg-secondary ms-1">
+                        {{ $customer->invoices->count() }}
+                    </span>
+
+                </button>   
 
         </ul>
 
@@ -1798,6 +1822,146 @@
 
                 </div>
 
+            </div>
+            {{-- =====================================================
+                INVOICES TAB
+            ====================================================== --}}
+        {{-- INVOICES TAB --}}
+            <div class="tab-pane fade"
+                 id="invoices-pane"
+                 role="tabpanel"
+                 aria-labelledby="invoices-tab"
+                 tabindex="0">
+
+                <div class="d-flex justify-content-between
+                            align-items-center mb-3">
+                    <h5 class="mb-0">Customer Invoices</h5>
+
+                    <a href="{{ route('crm.invoices.create', [
+                        'customer_id' => $customer->id
+                    ]) }}"
+                       class="btn btn-sm btn-primary">
+                        <i class="bi bi-plus-lg"></i>
+                        Create Invoice
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Date</th>
+                                <th>Due Date</th>
+                                <th class="text-end">Total</th>
+                                <th class="text-end">Paid</th>
+                                <th class="text-end">Balance</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($customer->invoices as $invoice)
+                                <tr>
+                                    <td class="fw-semibold">
+                                        {{ $invoice->invoice_number }}
+                                    </td>
+                                    <td>
+                                        {{ $invoice->created_at
+                                            ? $invoice->created_at->format('M d, Y')
+                                            : '—' }}
+                                    </td>
+                                    <td>
+                                        {{ $invoice->due_date
+                                            ? \Illuminate\Support\Carbon::parse(
+                                                $invoice->due_date
+                                            )->format('M d, Y')
+                                            : '—' }}
+                                    </td>
+                                    <td class="text-end">
+                                        {{ number_format(
+                                            $invoice->grand_total, 2
+                                        ) }}
+                                    </td>
+                                    <td class="text-end text-success">
+                                        {{ number_format(
+                                            $invoice->paid_amount, 2
+                                        ) }}
+                                    </td>
+                                    <td class="text-end fw-semibold">
+                                        {{ number_format(
+                                            $invoice->balance, 2
+                                        ) }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $statusClasses = [
+                                                'draft' => 'bg-secondary',
+                                                'posted' => 'bg-primary',
+                                                'partial' => 'bg-info text-dark',
+                                                'paid' => 'bg-success',
+                                                'overdue' => 'bg-danger',
+                                                'void' => 'bg-dark',
+                                            ];
+                                            $status = $invoice->status;
+                                        @endphp
+
+                                        <span class="badge {{
+                                            $statusClasses[$status]
+                                                ?? 'bg-secondary'
+                                        }}">
+                                            {{ ucfirst($status) }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ route(
+                                            'crm.invoices.show', $invoice
+                                        ) }}"
+                                           class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="8"
+                                        class="text-center text-muted py-4">
+                                        No invoices found for this customer.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                        @if ($customer->invoices->isNotEmpty())
+                            <tfoot class="table-light">
+                                <tr>
+                                    <th colspan="3">Total</th>
+                                    <th class="text-end">
+                                        {{ number_format(
+                                            $customer->invoices->sum(
+                                                'grand_total'
+                                            ), 2
+                                        ) }}
+                                    </th>
+                                    <th class="text-end">
+                                        {{ number_format(
+                                            $customer->invoices->sum(
+                                                'paid_amount'
+                                            ), 2
+                                        ) }}
+                                    </th>
+                                    <th class="text-end">
+                                        {{ number_format(
+                                            $customer->invoices->sum(
+                                                'balance'
+                                            ), 2
+                                        ) }}
+                                    </th>
+                                    <th colspan="2"></th>
+                                </tr>
+                            </tfoot>
+                        @endif
+                    </table>
+                </div>
             </div>
 
         </div>

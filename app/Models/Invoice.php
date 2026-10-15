@@ -71,6 +71,10 @@ class Invoice extends Model
             'invoice_id'
         )->orderBy('sort_order');
     }
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
 
     public function recalculateTotals(): void
     {
@@ -118,5 +122,18 @@ class Invoice extends Model
         }
 
         $this->save();
+    }
+
+    public function getPaidAmountAttribute(): float
+    {
+        return (float) $this->payments()->sum('amount');
+    }
+
+    public function getBalanceAttribute(): float
+    {
+        return max(
+            0,
+            (float) $this->grand_total - $this->paid_amount
+        );
     }
 }

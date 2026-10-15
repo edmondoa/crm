@@ -162,6 +162,13 @@
         <i class="bi bi-receipt"></i>
         <span>Invoices</span>
     </a>
+    <a
+        href="{{ route('crm.payments.index') }}"
+        class="nav-link sidebar-link"
+    >
+        <i class="bi bi-cash"></i>
+        <span>Payments</span>
+    </a>
 
 
 </div>

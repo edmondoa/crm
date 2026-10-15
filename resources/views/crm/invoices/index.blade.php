@@ -373,13 +373,13 @@
 
 
                         <td class="text-end">
-                            ₱{{ number_format($invoice->amount_paid, 2) }}
+                            ₱{{ number_format($invoice->paid_amount, 2) }}
                         </td>
 
 
                         <td class="text-end fw-semibold">
 
-                            ₱{{ number_format($invoice->balance_due, 2) }}
+                            ₱{{ number_format($invoice->balance, 2) }}
 
                         </td>
 
