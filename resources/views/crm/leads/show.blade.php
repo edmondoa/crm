@@ -94,7 +94,7 @@
                         </td>
                         <td>{{ $opportunity->expected_close_date?->format('M d, Y') ?? '—' }}</td>
                         <td class="text-end">
-                            <a href="{{ route('opportunities.show', $opportunity) }}"
+                            <a href="{{ route('crm.opportunities.show', $opportunity) }}"
                                class="btn btn-sm btn-outline-primary">View</a>
                         </td>
                     </tr>

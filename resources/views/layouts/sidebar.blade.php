@@ -176,6 +176,13 @@
         <i class="bi bi-cash"></i>
         <span>Payments</span>
     </a>
+     <div class="sidebar-group-title">
+        Settings
+    </div>
+    <a href="{{ route('crm.email-templates.index') }}" class="nav-link sidebar-link"">
+        <i class="bi bi-envelope-paper me-2"></i>
+        Email Templates
+    </a>
 
 
 </div>

@@ -17,6 +17,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\OpportunityController;
+use App\Http\Controllers\Crm\EmailTemplateController;
 Route::get('/', function () {
     return redirect()->route('crm.dashboard');
 });
@@ -234,5 +235,14 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
     ])->name('opportunities.stage');
 
     Route::resource('opportunities', OpportunityController::class);
+    Route::get('email-templates', [EmailTemplateController::class, 'index'])->name('email-templates.index');
+    Route::get('email-templates/create', [EmailTemplateController::class, 'create'])->name('email-templates.create');
+    Route::post('email-templates', [EmailTemplateController::class, 'store'])->name('email-templates.store');
+    Route::post('email-templates/{email_template}/duplicate', [EmailTemplateController::class, 'duplicate'])->name('email-templates.duplicate');
+    Route::get('email-templates/{email_template}/preview', [EmailTemplateController::class, 'preview'])->name('email-templates.preview');
+    Route::post('email-templates/{email_template}/test', [EmailTemplateController::class, 'testEmail'])->name('email-templates.test');
+    Route::get('email-templates/{email_template}/edit', [EmailTemplateController::class, 'edit'])->name('email-templates.edit');
+    Route::put('email-templates/{email_template}', [EmailTemplateController::class, 'update'])->name('email-templates.update');
+    Route::delete('email-templates/{email_template}', [EmailTemplateController::class, 'destroy'])->name('email-templates.destroy');
 
 });

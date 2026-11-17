@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
+use App\Models\CrmSetting;
 use App\Models\Customer;
 use App\Models\Lead;
 use Illuminate\Http\RedirectResponse;
@@ -143,8 +144,11 @@ class LeadController extends Controller
              * different fields or a customer-number generator.
              */
             $customer = Customer::create([
-                'name' => $lead->company_name
-                    ?: $lead->full_name,
+                'customer_code' => $this->generateCustomerCode(),
+                'first_name' => $lead->first_name,
+                'last_name' => $lead->last_name,
+                'company_name' => $lead->company_name,
+               
                 'email' => $lead->email,
                 'phone' => $lead->phone,
             ]);
@@ -161,5 +165,38 @@ class LeadController extends Controller
         return redirect()
             ->route('crm.customers.show', $customer)
             ->with('success', 'Lead converted to customer.');
+    }
+
+    private function generateCustomerCode(): string
+    {
+        $settings = CrmSetting::active();
+
+        $prefix = $settings->customer_code_prefix;
+
+        $lastCustomer = Customer::query()
+            ->whereNotNull('customer_code')
+            ->orderByDesc('id')
+            ->first();
+
+        if (!$lastCustomer) {
+            $number = 1;
+        } else {
+            $lastCode = $lastCustomer->customer_code;
+
+            $number = (int) preg_replace(
+                '/\D/',
+                '',
+                str_replace($prefix, '', $lastCode)
+            );
+
+            $number++;
+        }
+
+        return $prefix . str_pad(
+            $number,
+            5,
+            '0',
+            STR_PAD_LEFT
+        );
     }
 }
