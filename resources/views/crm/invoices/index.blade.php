@@ -60,7 +60,7 @@
 
 
     {{-- Summary --}}
-    <div class="row g-3 mb-4">
+    <div class="row g-3 mb-4 stats-grid">
 
         <div class="col-md-3">
             <div class="crm-stat-card">

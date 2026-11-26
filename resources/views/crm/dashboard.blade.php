@@ -52,7 +52,7 @@
          KPI CARDS
     ========================================================== --}}
 
-    <div class="row g-3 mb-4">
+    <div class="row g-3 mb-4 stats-grid">
 
         {{-- Customers --}}
         <div class="col-xl-3 col-md-6">

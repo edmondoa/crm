@@ -1,3 +1,14 @@
+<aside class="admin-sidebar">
+    <button
+        type="button"
+        class="sidebar-close"
+        onclick="document.querySelector('.admin-sidebar').classList.remove('open'); document.querySelector('.sidebar-toggle').setAttribute('aria-expanded', 'false')"
+        aria-label="Close navigation"
+    >
+        <i class="bi bi-x-lg"></i>
+    </button>
+
+    <nav class="sidebar-nav">
 {{-- CRM --}}
 <div class="sidebar-section">
 
@@ -186,3 +197,5 @@
 
 
 </div>
+    </nav>
+</aside>
