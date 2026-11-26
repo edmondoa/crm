@@ -356,6 +356,9 @@
                 class="form-control @error('address_line_1') is-invalid @enderror"
                 value="{{ old('address_line_1', $customer->address_line_1 ?? '') }}"
                 placeholder="123 Main Street"
+                data-google-places="address"
+                data-suggestions-url="{{ route('crm.google-places.autocomplete') }}"
+                data-details-url="{{ route('crm.google-places.details') }}"
             >
 
             @error('address_line_1')
@@ -402,6 +405,7 @@
                 class="form-control @error('city') is-invalid @enderror"
                 value="{{ old('city', $customer->city ?? '') }}"
                 placeholder="Austin"
+                data-address-city
             >
 
             @error('city')
@@ -422,6 +426,7 @@
                 name="state"
                 id="state"
                 class="form-select @error('state') is-invalid @enderror"
+                data-address-state
             >
                 <option value="">Select State</option>
 
@@ -512,6 +517,7 @@
                 class="form-control @error('zip_code') is-invalid @enderror"
                 value="{{ old('zip_code', $customer->zip_code ?? '') }}"
                 placeholder="78701"
+                data-address-zip
                 maxlength="10"
             >
 
@@ -535,6 +541,7 @@
                 id="country"
                 class="form-control"
                 value="{{ old('country', $customer->country ?? 'United States') }}"
+                data-address-country
             >
 
         </div>

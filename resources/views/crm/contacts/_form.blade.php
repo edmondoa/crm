@@ -477,6 +477,9 @@
                 class="form-control"
                 value="{{ old('address_line_1', $contact->address_line_1 ?? '') }}"
                 placeholder="123 Main Street"
+                data-google-places="address"
+                data-suggestions-url="{{ route('crm.google-places.autocomplete') }}"
+                data-details-url="{{ route('crm.google-places.details') }}"
             >
 
         </div>
@@ -519,6 +522,7 @@
                 class="form-control"
                 value="{{ old('city', $contact->city ?? '') }}"
                 placeholder="Austin"
+                data-address-city
             >
 
         </div>
@@ -537,6 +541,7 @@
                 name="state"
                 id="state"
                 class="form-select"
+                data-address-state
             >
 
                 <option value="">
@@ -575,6 +580,7 @@
                 class="form-control"
                 value="{{ old('zip_code', $contact->zip_code ?? '') }}"
                 placeholder="78701"
+                data-address-zip
                 maxlength="10"
             >
 
@@ -596,6 +602,7 @@
                 id="country"
                 class="form-control"
                 value="{{ old('country', $contact->country ?? 'United States') }}"
+                data-address-country
             >
 
         </div>

@@ -1,23 +1,25 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Crm\DashboardController;
-use App\Http\Controllers\Crm\CustomerController;
-use App\Http\Controllers\Crm\ContactController;
-use App\Http\Controllers\Crm\PropertyController;
-use App\Http\Controllers\Crm\PropertyLocationController;
 use App\Http\Controllers\Crm\ActivityController;
-use App\Http\Controllers\Crm\TaskController;
-use App\Http\Controllers\Crm\JobController;
+use App\Http\Controllers\Crm\ContactController;
+use App\Http\Controllers\Crm\CustomerController;
+use App\Http\Controllers\Crm\DashboardController;
+use App\Http\Controllers\Crm\EmailTemplateController;
 use App\Http\Controllers\Crm\EmployeeController;
 use App\Http\Controllers\Crm\JobAssignmentController;
+use App\Http\Controllers\Crm\JobController;
 use App\Http\Controllers\Crm\JobScheduleController;
+use App\Http\Controllers\Crm\PropertyController;
+use App\Http\Controllers\Crm\PropertyLocationController;
+use App\Http\Controllers\Crm\TaskController;
 use App\Http\Controllers\EstimateController;
+use App\Http\Controllers\GooglePlacesController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\OpportunityController;
-use App\Http\Controllers\Crm\EmailTemplateController;
+use App\Http\Controllers\PaymentController;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return redirect()->route('crm.dashboard');
 });
@@ -25,7 +27,17 @@ Route::get('dashboard', function () {
     return redirect()->route('crm.dashboard');
 });
 
-Route::prefix('crm') ->name('crm.') ->group(function () {
+Route::prefix('crm')->name('crm.')->group(function () {
+
+    Route::get(
+        'google-places/autocomplete',
+        [GooglePlacesController::class, 'autocomplete']
+    )->middleware('throttle:30,1')->name('google-places.autocomplete');
+
+    Route::get(
+        'google-places/details',
+        [GooglePlacesController::class, 'details']
+    )->middleware('throttle:30,1')->name('google-places.details');
 
     Route::get('/', [DashboardController::class, 'index'])
         ->name('dashboard');
@@ -39,15 +51,15 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
         'customers/{customer}/contacts',
         [
             CustomerController::class,
-            'contacts'
+            'contacts',
         ]
     )->name('customers.contacts');
 
-     Route::get(
+    Route::get(
         'customers/{customer}/task-context',
         [
             TaskController::class,
-            'customerContext'
+            'customerContext',
         ]
     )->name('customers.task-context');
 
@@ -59,7 +71,6 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
         ]
     )->name('customers.job-context');
 
-
     Route::resource(
         'customers',
         CustomerController::class
@@ -70,11 +81,11 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
         ContactController::class
     );
 
-     Route::get(
+    Route::get(
         'properties/{property}/task-locations',
         [
             TaskController::class,
-            'propertyLocations'
+            'propertyLocations',
         ]
     )->name('properties.task-locations');
 
@@ -95,7 +106,7 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
         'property-locations-by-property/{property}',
         [
             PropertyLocationController::class,
-            'byProperty'
+            'byProperty',
         ]
     )->name(
         'property-locations.by-property'
@@ -105,7 +116,6 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
         'property-locations',
         PropertyLocationController::class
     );
-    
 
     Route::resource(
         'activities',
@@ -116,7 +126,7 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
         'activities/{activity}/complete',
         [
             ActivityController::class,
-            'complete'
+            'complete',
         ]
     )->name('activities.complete');
 
@@ -144,45 +154,45 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
     ]);
 
     Route::prefix('jobs/{job}/assignments')
-    ->name('jobs.assignments.')
-    ->group(function () {
+        ->name('jobs.assignments.')
+        ->group(function () {
 
-        Route::get(
-            '/',
-            [JobAssignmentController::class, 'index']
-        )->name('index');
+            Route::get(
+                '/',
+                [JobAssignmentController::class, 'index']
+            )->name('index');
 
-        Route::get(
-            '/create',
-            [JobAssignmentController::class, 'create']
-        )->name('create');
+            Route::get(
+                '/create',
+                [JobAssignmentController::class, 'create']
+            )->name('create');
 
-        Route::post(
-            '/',
-            [JobAssignmentController::class, 'store']
-        )->name('store');
+            Route::post(
+                '/',
+                [JobAssignmentController::class, 'store']
+            )->name('store');
 
-        Route::get(
-            '/{assignment}/edit',
-            [JobAssignmentController::class, 'edit']
-        )->name('edit');
+            Route::get(
+                '/{assignment}/edit',
+                [JobAssignmentController::class, 'edit']
+            )->name('edit');
 
-        Route::put(
-            '/{assignment}',
-            [JobAssignmentController::class, 'update']
-        )->name('update');
+            Route::put(
+                '/{assignment}',
+                [JobAssignmentController::class, 'update']
+            )->name('update');
 
-        Route::delete(
-            '/{assignment}',
-            [JobAssignmentController::class, 'destroy']
-        )->name('destroy');
+            Route::delete(
+                '/{assignment}',
+                [JobAssignmentController::class, 'destroy']
+            )->name('destroy');
 
-        Route::post(
-            '/{assignment}/primary',
-            [JobAssignmentController::class, 'makePrimary']
-        )->name('primary');
+            Route::post(
+                '/{assignment}/primary',
+                [JobAssignmentController::class, 'makePrimary']
+            )->name('primary');
 
-    });
+        });
 
     Route::get(
         'job-schedules/calendar',
@@ -209,29 +219,26 @@ Route::prefix('crm') ->name('crm.') ->group(function () {
         EstimateController::class
     )->names('estimates');
 
-    
-
     Route::resource(
         'invoices',
         InvoiceController::class
     );
 
     Route::resource('payments', PaymentController::class)
-    ->except(['edit', 'update', 'destroy']);
-    
+        ->except(['edit', 'update', 'destroy']);
 
     Route::resource('leads', LeadController::class);
 
     Route::post('leads/{lead}/convert', [
-        LeadController::class, 'convert'
+        LeadController::class, 'convert',
     ])->name('leads.convert');
 
     Route::get('opportunities/pipeline', [
-        OpportunityController::class, 'pipeline'
+        OpportunityController::class, 'pipeline',
     ])->name('opportunities.pipeline');
 
     Route::patch('opportunities/{opportunity}/stage', [
-        OpportunityController::class, 'updateStage'
+        OpportunityController::class, 'updateStage',
     ])->name('opportunities.stage');
 
     Route::resource('opportunities', OpportunityController::class);

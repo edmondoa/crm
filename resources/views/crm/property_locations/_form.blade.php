@@ -200,6 +200,9 @@
                 class="form-control @error('address_line_1') is-invalid @enderror"
                 value="{{ old('address_line_1', $propertyLocation->address_line_1 ?? '') }}"
                 placeholder="123 Main Street"
+                data-google-places="address"
+                data-suggestions-url="{{ route('crm.google-places.autocomplete') }}"
+                data-details-url="{{ route('crm.google-places.details') }}"
                 required
             >
 
@@ -267,6 +270,7 @@
             <select
                 name="state"
                 class="form-select @error('state') is-invalid @enderror"
+                data-address-state
                 required
             >
 
@@ -368,6 +372,7 @@
                 class="form-control @error('zip_code') is-invalid @enderror"
                 value="{{ old('zip_code', $propertyLocation->zip_code ?? '') }}"
                 placeholder="75201"
+                data-address-zip
                 maxlength="10"
                 required
             >
@@ -436,6 +441,7 @@
                 class="form-control @error('latitude') is-invalid @enderror"
                 value="{{ old('latitude', $propertyLocation->latitude ?? '') }}"
                 placeholder="32.7767000"
+                data-address-latitude
             >
 
             @error('latitude')
@@ -459,6 +465,7 @@
                 class="form-control @error('longitude') is-invalid @enderror"
                 value="{{ old('longitude', $propertyLocation->longitude ?? '') }}"
                 placeholder="-96.7970000"
+                data-address-longitude
             >
 
             @error('longitude')
