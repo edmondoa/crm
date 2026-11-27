@@ -264,6 +264,13 @@
 
                     </div>
 
+                    @if($customer->date_of_birth)
+                        <div class="col-md-6">
+                            <div class="detail-label">Date of Birth</div>
+                            <div class="detail-value">{{ $customer->date_of_birth->format('M d, Y') }}</div>
+                        </div>
+                    @endif
+
 
                     <div class="col-md-3">
 

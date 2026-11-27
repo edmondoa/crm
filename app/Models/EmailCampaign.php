@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EmailCampaign extends Model
 {
-    public const TARGET_TYPES = [
+    public const CAMPAIGN_TYPES = [
         'general' => 'General audience',
         'birthday' => 'Birthday',
         'new_customers' => 'New customers added',
@@ -22,6 +22,7 @@ class EmailCampaign extends Model
         'audience_description',
         'status',
         'scheduled_at',
+        'last_run_at',
         'notes',
         'created_by',
         'updated_by',
@@ -29,6 +30,7 @@ class EmailCampaign extends Model
 
     protected $casts = [
         'scheduled_at' => 'datetime',
+        'last_run_at' => 'datetime',
     ];
 
     public function emailTemplate(): BelongsTo
@@ -36,8 +38,8 @@ class EmailCampaign extends Model
         return $this->belongsTo(EmailTemplate::class);
     }
 
-    public function getTargetLabelAttribute(): string
+    public function getCampaignTypeLabelAttribute(): string
     {
-        return self::TARGET_TYPES[$this->target_type] ?? self::TARGET_TYPES['general'];
+        return self::CAMPAIGN_TYPES[$this->target_type] ?? self::CAMPAIGN_TYPES['general'];
     }
 }

@@ -39,7 +39,12 @@
                         <label class="form-label" for="target_type">Campaign type <span class="text-danger">*</span></label>
                         <select id="target_type" name="target_type" class="form-select" required>
                             @foreach($targetTypes as $value => $label)
-                                <option value="{{ $value }}" @selected(old('target_type', $campaign->target_type ?? 'general') === $value)>{{ $label }}</option>
+                                <option
+                                    value="{{ $value }}"
+                                    data-match-count="{{ $audienceCounts[$value] ?? 0 }}"
+                                    data-rule="{{ $campaignTypeDescriptions[$value] }}"
+                                    @selected(old('target_type', $campaign->target_type ?? 'general') === $value)
+                                >{{ $label }} ({{ $audienceCounts[$value] ?? 0 }} {{ ($audienceCounts[$value] ?? 0) === 1 ? 'match' : 'matches' }})</option>
                             @endforeach
                         </select>
                         @error('target_type')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
@@ -47,7 +52,7 @@
                     <div class="col-12">
                         <label class="form-label" for="audience_description">Planned audience</label>
                         <textarea id="audience_description" name="audience_description" class="form-control" rows="2" maxlength="1000" placeholder="Describe who this campaign is intended for">{{ old('audience_description', $campaign->audience_description) }}</textarea>
-                        <div class="form-text">Describe the intended audience. Campaign type is saved with the campaign, but it does not select or contact CRM records yet.</div>
+                        <div class="form-text">Campaign type selects matching CRM customers. No email is sent from this screen.</div>
                         @error('audience_description')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6">
@@ -70,8 +75,31 @@
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white py-3"><h2 class="h6 mb-0">Campaign type behavior</h2></div>
             <div class="card-body">
-                <p class="text-muted mb-0">Birthday, new customers added, pending invoices, and monthly invoices are available campaign types. Recipient matching and email delivery are not active yet.</p>
+                <p id="campaign-type-rule" class="text-muted mb-3" aria-live="polite"></p>
+                <p id="campaign-audience-count" class="mb-2" aria-live="polite">0 matching active customers with an email address.</p>
+                <p class="small text-muted mb-0">This is an audience preview only. Email delivery remains off until a sender and consent rules are configured.</p>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const campaignType = document.getElementById('target_type');
+    const rule = document.getElementById('campaign-type-rule');
+    const count = document.getElementById('campaign-audience-count');
+
+    if (!campaignType || !rule || !count) return;
+
+    const updateAudiencePreview = function () {
+        const option = campaignType.options[campaignType.selectedIndex];
+        const matchCount = Number(option.dataset.matchCount || 0);
+        rule.textContent = option.dataset.rule || '';
+        const customerNoun = matchCount === 1 ? 'customer' : 'customers';
+        count.textContent = `${matchCount} matching active ${customerNoun} with an email address.`;
+    };
+
+    campaignType.addEventListener('change', updateAudiencePreview);
+    updateAudiencePreview();
+});
+</script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Crm;
 use App\Http\Controllers\Controller;
 use App\Models\EmailCampaign;
 use App\Models\EmailTemplate;
+use App\Services\EmailCampaignAudienceResolver;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -13,6 +14,11 @@ use Illuminate\View\View;
 class EmailCampaignController extends Controller
 {
     private const STATUSES = ['draft', 'scheduled', 'cancelled'];
+
+    public function __construct(
+        private readonly EmailCampaignAudienceResolver $audienceResolver
+    ) {
+    }
 
     public function index(Request $request): View
     {
@@ -90,7 +96,7 @@ class EmailCampaignController extends Controller
         return $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'email_template_id' => ['required', 'integer', 'exists:email_templates,id'],
-            'target_type' => ['required', Rule::in(array_keys(EmailCampaign::TARGET_TYPES))],
+            'target_type' => ['required', Rule::in(array_keys(EmailCampaign::CAMPAIGN_TYPES))],
             'audience_description' => ['nullable', 'string', 'max:1000'],
             'status' => ['required', Rule::in(self::STATUSES)],
             'scheduled_at' => $scheduledAtRules,
@@ -103,7 +109,15 @@ class EmailCampaignController extends Controller
         return [
             'campaign' => $campaign,
             'templates' => EmailTemplate::query()->orderBy('name')->get(),
-            'targetTypes' => EmailCampaign::TARGET_TYPES,
+            'targetTypes' => EmailCampaign::CAMPAIGN_TYPES,
+            'audienceCounts' => $this->audienceResolver->countsByType($campaign),
+            'campaignTypeDescriptions' => [
+                'general' => 'All active customers with an email address.',
+                'birthday' => 'Active customers whose birthday is today.',
+                'new_customers' => 'Active customers created since this campaign was created or last run.',
+                'pending_invoices' => 'Customers with an unpaid sent, viewed, partial, or overdue invoice.',
+                'monthly_invoices' => 'Customers with an unpaid invoice due during the current month.',
+            ],
         ];
     }
 }

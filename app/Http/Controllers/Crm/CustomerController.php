@@ -112,6 +112,12 @@ class CustomerController extends Controller
                 'max:100',
             ],
 
+            'date_of_birth' => [
+                'nullable',
+                'date',
+                'before_or_equal:today',
+            ],
+
             'email' => [
                 'nullable',
                 'email',
@@ -262,6 +268,12 @@ class CustomerController extends Controller
                 'nullable',
                 'string',
                 'max:100',
+            ],
+
+            'date_of_birth' => [
+                'nullable',
+                'date',
+                'before_or_equal:today',
             ],
 
             'email' => [

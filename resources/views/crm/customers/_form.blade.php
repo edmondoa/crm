@@ -238,6 +238,22 @@
 
         </div>
 
+        <div class="col-md-4">
+            <label for="date_of_birth" class="form-label">Date of Birth</label>
+            <input
+                type="date"
+                name="date_of_birth"
+                id="date_of_birth"
+                max="{{ now()->toDateString() }}"
+                class="form-control @error('date_of_birth') is-invalid @enderror"
+                value="{{ old('date_of_birth', $customer?->date_of_birth?->format('Y-m-d') ?? '') }}"
+            >
+            <div class="form-text">Used for birthday campaign matching.</div>
+            @error('date_of_birth')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
     </div>
 
 </div>

@@ -15,6 +15,7 @@ class Customer extends Model
         'first_name',
         'middle_name',
         'last_name',
+        'date_of_birth',
         'email',
         'phone',
         'mobile',
@@ -30,6 +31,7 @@ class Customer extends Model
     ];
 
     protected $casts = [
+        'date_of_birth' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

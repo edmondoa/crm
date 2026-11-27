@@ -75,7 +75,7 @@
                                 <small class="text-muted">{{ $campaign->audience_description ?: 'Audience not specified' }}</small>
                             </td>
                             <td>{{ $campaign->emailTemplate?->name ?? 'Template removed' }}</td>
-                            <td><span class="badge text-bg-light">{{ $campaign->target_label }}</span></td>
+                            <td><span class="badge text-bg-light">{{ $campaign->campaign_type_label }}</span></td>
                             <td>
                                 @php
                                     $statusClass = match ($campaign->status) {
