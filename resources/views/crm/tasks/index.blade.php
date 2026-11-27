@@ -45,7 +45,7 @@
      STATISTICS
 ========================================================== --}}
 
-<div class="row g-3 mb-4">
+<div class="row g-3 mb-4 stats-grid">
 
     <div class="col-md-6 col-xl">
 

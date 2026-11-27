@@ -1,0 +1,2 @@
+- [Campaign automation scope](campaign-planning-scope.md) — scheduled delivery and four audience targets are requested; confirm provider and eligible recipients before sending.
+- [Date-only report filters](sqlite-date-range-reporting.md) — use date-aware comparisons for SQLite date columns; string range bounds can omit records on the final day.

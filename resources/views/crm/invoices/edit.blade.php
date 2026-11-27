@@ -112,10 +112,9 @@
 @endsection
 
 @push('styles')
-<link rel="stylesheet"
-      href="{{ asset('css/invoices.css') }}">
+    @vite('resources/css/invoices.css')
 @endpush
 
 @push('scripts')
-<script src="{{ asset('js/invoices.js') }}"></script>
+    @vite('resources/js/invoices.js')
 @endpush

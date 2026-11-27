@@ -238,6 +238,22 @@
 
         </div>
 
+        <div class="col-md-4">
+            <label for="date_of_birth" class="form-label">Date of Birth</label>
+            <input
+                type="date"
+                name="date_of_birth"
+                id="date_of_birth"
+                max="{{ now()->toDateString() }}"
+                class="form-control @error('date_of_birth') is-invalid @enderror"
+                value="{{ old('date_of_birth', $customer?->date_of_birth?->format('Y-m-d') ?? '') }}"
+            >
+            <div class="form-text">Used for birthday campaign matching.</div>
+            @error('date_of_birth')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
     </div>
 
 </div>
@@ -356,6 +372,9 @@
                 class="form-control @error('address_line_1') is-invalid @enderror"
                 value="{{ old('address_line_1', $customer->address_line_1 ?? '') }}"
                 placeholder="123 Main Street"
+                data-location-autocomplete="address"
+                data-suggestions-url="{{ route('crm.location-suggestions') }}"
+                data-details-url="{{ route('crm.location-details') }}"
             >
 
             @error('address_line_1')
@@ -402,6 +421,7 @@
                 class="form-control @error('city') is-invalid @enderror"
                 value="{{ old('city', $customer->city ?? '') }}"
                 placeholder="Austin"
+                data-address-city
             >
 
             @error('city')
@@ -422,6 +442,7 @@
                 name="state"
                 id="state"
                 class="form-select @error('state') is-invalid @enderror"
+                data-address-state
             >
                 <option value="">Select State</option>
 
@@ -512,6 +533,7 @@
                 class="form-control @error('zip_code') is-invalid @enderror"
                 value="{{ old('zip_code', $customer->zip_code ?? '') }}"
                 placeholder="78701"
+                data-address-zip
                 maxlength="10"
             >
 
@@ -535,6 +557,7 @@
                 id="country"
                 class="form-control"
                 value="{{ old('country', $customer->country ?? 'United States') }}"
+                data-address-country
             >
 
         </div>

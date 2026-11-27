@@ -1,3 +1,14 @@
+<aside class="admin-sidebar">
+    <button
+        type="button"
+        class="sidebar-close"
+        onclick="document.querySelector('.admin-sidebar').classList.remove('open'); document.querySelector('.sidebar-toggle').setAttribute('aria-expanded', 'false')"
+        aria-label="Close navigation"
+    >
+        <i class="bi bi-x-lg"></i>
+    </button>
+
+    <nav class="sidebar-nav">
 {{-- CRM --}}
 <div class="sidebar-section">
 
@@ -35,6 +46,10 @@
         {{ request()->routeIs('opportunities.pipeline') ? 'active' : '' }}">
         <i class="bi bi-kanban"></i>
         <span>Sales Pipeline</span>
+    </a>
+    <a href="{{ route('crm.reports.index') }}" class="sidebar-link {{ request()->routeIs('crm.reports.*') ? 'active' : '' }}">
+        <i class="bi bi-file-earmark-bar-graph"></i>
+        <span>Reports</span>
     </a>
 
     <a href="#" class="sidebar-link disabled">
@@ -183,6 +198,12 @@
         <i class="bi bi-envelope-paper me-2"></i>
         Email Templates
     </a>
+    <a href="{{ route('crm.email-campaigns.index') }}" class="nav-link sidebar-link">
+        <i class="bi bi-megaphone me-2"></i>
+        Email Campaigns
+    </a>
 
 
 </div>
+    </nav>
+</aside>

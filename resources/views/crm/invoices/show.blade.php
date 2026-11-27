@@ -544,6 +544,5 @@
 @endsection
 
 @push('styles')
-<link rel="stylesheet"
-      href="{{ asset('css/invoices.css') }}">
+    @vite('resources/css/invoices.css')
 @endpush

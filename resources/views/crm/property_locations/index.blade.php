@@ -153,6 +153,9 @@
             class="form-control"
             value="{{ request('search') }}"
             placeholder="Location, address, city, ZIP, property..."
+            data-location-autocomplete="search"
+            data-suggestions-url="{{ route('crm.location-suggestions') }}"
+            data-details-url="{{ route('crm.location-details') }}"
         >
 
     </div>

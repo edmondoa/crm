@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreInvoiceRequest;
+use App\Http\Requests\UpdateInvoiceRequest;
+use App\Models\CrmEstimate;
+use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
-use App\Models\Customer;
 use App\Models\Job;
 use App\Models\Property;
-use App\Models\CrmEstimate;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+
 class InvoiceController extends Controller
 {
     /**
@@ -25,7 +27,8 @@ class InvoiceController extends Controller
                 'customer',
                 'property',
                 'job',
-            ]);
+            ])
+            ->withSum('payments as paid_amount', 'amount');
 
         /*
         |--------------------------------------------------------------------------
@@ -53,7 +56,6 @@ class InvoiceController extends Controller
             });
         }
 
-
         /*
         |--------------------------------------------------------------------------
         | Status
@@ -67,7 +69,6 @@ class InvoiceController extends Controller
             );
 
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -84,7 +85,6 @@ class InvoiceController extends Controller
 
         }
 
-
         if ($request->filled('date_to')) {
 
             $query->whereDate(
@@ -94,7 +94,6 @@ class InvoiceController extends Controller
             );
 
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -107,7 +106,6 @@ class InvoiceController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-
         /*
         |--------------------------------------------------------------------------
         | Dashboard Totals
@@ -115,10 +113,24 @@ class InvoiceController extends Controller
         */
         $totalInvoiced = Invoice::sum('grand_total');
 
-        $totalOutstanding = Invoice::sum('balance_due');
+        $paymentTotals = DB::table('payments')
+            ->select('invoice_id')
+            ->selectRaw('SUM(amount) as paid_total')
+            ->groupBy('invoice_id');
 
-        $totalPaid = Invoice::sum('amount_paid');
+        $totalOutstanding = DB::table('invoices')
+            ->leftJoinSub($paymentTotals, 'payment_totals', function ($join) {
+                $join->on('invoices.id', '=', 'payment_totals.invoice_id');
+            })
+            ->where('invoices.status', '!=', 'cancelled')
+            ->selectRaw(
+                'COALESCE(SUM(CASE WHEN invoices.grand_total - COALESCE(payment_totals.paid_total, 0) > 0
+                    THEN invoices.grand_total - COALESCE(payment_totals.paid_total, 0)
+                    ELSE 0 END), 0) as total'
+            )
+            ->value('total');
 
+        $totalPaid = DB::table('payments')->sum('amount');
 
         /*
         |--------------------------------------------------------------------------
@@ -138,24 +150,6 @@ class InvoiceController extends Controller
      */
     public function create(Request $request)
     {
-        if (!empty($data['estimate_id'])) {
-
-            $existingInvoice = CrmInvoice::where(
-                'estimate_id',
-                $data['estimate_id']
-            )
-            ->whereNotIn('status', ['cancelled'])
-            ->first();
-
-            if ($existingInvoice) {
-                return redirect()
-                    ->route('crm.invoices.show', $existingInvoice)
-                    ->with(
-                        'warning',
-                        'An invoice already exists for this estimate.'
-                    );
-            }
-        }
         $estimate = null;
 
         if ($request->filled('estimate_id')) {
@@ -167,6 +161,17 @@ class InvoiceController extends Controller
             ])->findOrFail(
                 $request->integer('estimate_id')
             );
+
+            $existingInvoice = Invoice::query()
+                ->where('estimate_id', $estimate->id)
+                ->where('status', '!=', 'cancelled')
+                ->first();
+
+            if ($existingInvoice) {
+                return redirect()
+                    ->route('crm.invoices.show', $existingInvoice)
+                    ->with('warning', 'An invoice already exists for this estimate.');
+            }
         }
 
         /*
@@ -185,14 +190,9 @@ class InvoiceController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $properties = collect();
-
-        if ($estimate?->customer_id) {
-            $properties = Property::query()
-                ->where('customer_id', $estimate->customer_id)
-                ->orderBy('name')
-                ->get();
-        }
+        $properties = Property::query()
+            ->orderBy('name')
+            ->get();
 
         /*
         |--------------------------------------------------------------------------
@@ -200,14 +200,9 @@ class InvoiceController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $jobs = collect();
-
-        if ($estimate?->customer_id) {
-            $jobs = Job::query()
-                ->where('customer_id', $estimate->customer_id)
-                ->orderByDesc('id')
-                ->get();
-        }
+        $jobs = Job::query()
+            ->orderByDesc('id')
+            ->get();
 
         /*
         |--------------------------------------------------------------------------
@@ -227,7 +222,7 @@ class InvoiceController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $invoice = new Invoice();
+        $invoice = new Invoice;
 
         $invoice->invoice_date = old(
             'invoice_date',
@@ -244,19 +239,26 @@ class InvoiceController extends Controller
             'draft'
         );
 
+        $selectedCustomerId = $estimate?->customer_id
+            ?? ($request->integer('customer_id') ?: null);
+        $selectedPropertyId = $estimate?->property_id
+            ?? ($request->integer('property_id') ?: null);
+        $selectedJobId = $estimate?->job_id
+            ?? ($request->integer('job_id') ?: null);
+
         $invoice->customer_id = old(
             'customer_id',
-            $estimate?->customer_id
+            $selectedCustomerId
         );
 
         $invoice->property_id = old(
             'property_id',
-            $estimate?->property_id
+            $selectedPropertyId
         );
 
         $invoice->job_id = old(
             'job_id',
-            $estimate?->job_id
+            $selectedJobId
         );
 
         $invoice->estimate_id = old(
@@ -304,20 +306,20 @@ class InvoiceController extends Controller
             $items = $estimate
                 ? $estimate->items->map(function ($item) {
                     return [
-                        'item_type'        => $item->item_type ?? 'service',
-                        'description'      => $item->description,
-                        'sku'              => $item->sku,
-                        'quantity'         => $item->quantity,
-                        'unit'             => $item->unit ?? 'unit',
-                        'unit_price'       => $item->unit_price ?? 0,
+                        'item_type' => $item->item_type ?? 'service',
+                        'description' => $item->description,
+                        'sku' => $item->sku,
+                        'quantity' => $item->quantity,
+                        'unit' => $item->unit ?? 'unit',
+                        'unit_price' => $item->unit_price ?? 0,
                         'discount_percent' => $item->discount_percent ?? 0,
-                        'tax_percent'      => $item->tax_percent ?? 0,
-                        'notes'            => $item->notes,
+                        'tax_percent' => $item->tax_percent ?? 0,
+                        'notes' => $item->notes,
                     ];
                 })->toArray()
                 : [];
         }
-       
+
         return view('crm.invoices.create', compact(
             'invoice',
             'customers',
@@ -334,6 +336,20 @@ class InvoiceController extends Controller
      */
     public function store(StoreInvoiceRequest $request)
     {
+        $estimateId = $request->validated()['estimate_id'] ?? null;
+        if ($estimateId) {
+            $existingInvoice = Invoice::query()
+                ->where('estimate_id', $estimateId)
+                ->where('status', '!=', 'cancelled')
+                ->first();
+
+            if ($existingInvoice) {
+                return redirect()
+                    ->route('crm.invoices.show', $existingInvoice)
+                    ->with('warning', 'An invoice already exists for this estimate.');
+            }
+        }
+
         $invoice = DB::transaction(function () use ($request) {
 
             $data = $request->validated();
@@ -382,7 +398,7 @@ class InvoiceController extends Controller
 
             foreach ($data['items'] as $index => $itemData) {
 
-                $item = new InvoiceItem();
+                $item = new InvoiceItem;
 
                 $item->invoice_id = $invoice->id;
 
@@ -443,7 +459,7 @@ class InvoiceController extends Controller
             ->route('crm.invoices.show', $invoice)
             ->with(
                 'success',
-                'Invoice created successfully from the estimate.'
+                'Invoice created successfully.'
             );
     }
 
@@ -451,31 +467,64 @@ class InvoiceController extends Controller
      * Display the specified resource.
      */
     public function show(Invoice $invoice)
-{
-    $invoice->load([
-        'customer',
-        'property',
-        'job',
-        'estimate',
-        'items',
-    ]);
+    {
+        $invoice->load([
+            'customer',
+            'property',
+            'job',
+            'estimate',
+            'items',
+        ]);
 
-    return view('crm.invoices.show', compact('invoice'));
-}
+        return view('crm.invoices.show', compact('invoice'));
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Invoice $invoice): View
     {
-        //
+        abort_unless($invoice->status === 'draft', 404);
+
+        $invoice->load('items');
+        $customers = Customer::query()->orderBy('last_name')->get();
+        $properties = Property::query()->orderBy('name')->get();
+        $jobs = Job::query()->orderByDesc('id')->get();
+        $estimates = CrmEstimate::query()
+            ->with('customer')
+            ->orderByDesc('estimate_date')
+            ->orderByDesc('id')
+            ->get();
+
+        return view('crm.invoices.edit', compact(
+            'invoice',
+            'customers',
+            'properties',
+            'jobs',
+            'estimates'
+        ));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateInvoiceRequest $request,Invoice $invoice) {
+    public function update(UpdateInvoiceRequest $request, Invoice $invoice): RedirectResponse
+    {
         $data = $request->validated();
+
+        if (! empty($data['estimate_id'])) {
+            $existingInvoice = Invoice::query()
+                ->where('estimate_id', $data['estimate_id'])
+                ->where('id', '!=', $invoice->id)
+                ->where('status', '!=', 'cancelled')
+                ->first();
+
+            if ($existingInvoice) {
+                return redirect()
+                    ->route('crm.invoices.show', $existingInvoice)
+                    ->with('warning', 'An invoice already exists for this estimate.');
+            }
+        }
 
         DB::transaction(function () use (
             $data,
@@ -483,42 +532,32 @@ class InvoiceController extends Controller
         ) {
 
             $invoice->update([
-                'customer_id' =>
-                    $data['customer_id'],
+                'customer_id' => $data['customer_id'],
 
-                'property_id' =>
-                    $data['property_id'] ?? null,
+                'property_id' => $data['property_id'] ?? null,
 
-                'job_id' =>
-                    $data['job_id'] ?? null,
+                'job_id' => $data['job_id'] ?? null,
 
-                'estimate_id' =>
-                    $data['estimate_id'] ?? null,
+                'estimate_id' => $data['estimate_id'] ?? null,
 
-                'invoice_date' =>
-                    $data['invoice_date'],
+                'invoice_date' => $data['invoice_date'],
 
-                'due_date' =>
-                    $data['due_date'],
+                'due_date' => $data['due_date'],
 
-                'status' =>
-                    $data['status'],
+                'status' => $data['status'],
 
-                'other_charges' =>
-                    $data['other_charges'] ?? 0,
+                'other_charges' => $data['other_charges'] ?? 0,
 
-                'notes' =>
-                    $data['notes'] ?? null,
+                'notes' => $data['notes'] ?? null,
 
-                'terms' =>
-                    $data['terms'] ?? null,
+                'terms' => $data['terms'] ?? null,
             ]);
 
             $submittedIds = [];
 
             foreach ($data['items'] as $index => $itemData) {
 
-                if (!empty($itemData['id'])) {
+                if (! empty($itemData['id'])) {
 
                     $item = $invoice
                         ->items()
@@ -528,7 +567,7 @@ class InvoiceController extends Controller
 
                 } else {
 
-                    $item = new InvoiceItem();
+                    $item = new InvoiceItem;
                 }
 
                 $item->fill($itemData);
@@ -555,6 +594,7 @@ class InvoiceController extends Controller
                 ->delete();
 
             $invoice->recalculateTotals();
+            $invoice->updatePaymentStatus();
         });
 
         return redirect()
@@ -571,9 +611,25 @@ class InvoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Invoice $invoice): RedirectResponse
     {
-        //
+        if ($invoice->status !== 'draft') {
+            return redirect()
+                ->route('crm.invoices.index')
+                ->with('error', 'Only draft invoices can be deleted.');
+        }
+
+        if ($invoice->payments()->exists()) {
+            return redirect()
+                ->route('crm.invoices.index')
+                ->with('error', 'Invoices with payments cannot be deleted.');
+        }
+
+        $invoice->delete();
+
+        return redirect()
+            ->route('crm.invoices.index')
+            ->with('success', 'Draft invoice deleted successfully.');
     }
 
     /**
@@ -583,11 +639,11 @@ class InvoiceController extends Controller
     {
         $year = now()->format('Y');
 
-        $lastInvoice = \App\Models\Invoice::where('invoice_number', 'like', "INV-{$year}-%")
+        $lastInvoice = Invoice::where('invoice_number', 'like', "INV-{$year}-%")
             ->orderByDesc('id')
             ->first();
 
-        if (!$lastInvoice) {
+        if (! $lastInvoice) {
             $sequence = 1;
         } else {
             $lastNumber = (int) substr($lastInvoice->invoice_number, -5);

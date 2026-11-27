@@ -200,6 +200,9 @@
                 class="form-control @error('address_line_1') is-invalid @enderror"
                 value="{{ old('address_line_1', $propertyLocation->address_line_1 ?? '') }}"
                 placeholder="123 Main Street"
+                data-location-autocomplete="address"
+                data-suggestions-url="{{ route('crm.location-suggestions') }}"
+                data-details-url="{{ route('crm.location-details') }}"
                 required
             >
 
@@ -246,6 +249,7 @@
                 class="form-control @error('city') is-invalid @enderror"
                 value="{{ old('city', $propertyLocation->city ?? '') }}"
                 placeholder="Dallas"
+                data-address-city
                 required
             >
 
@@ -267,6 +271,7 @@
             <select
                 name="state"
                 class="form-select @error('state') is-invalid @enderror"
+                data-address-state
                 required
             >
 
@@ -368,6 +373,7 @@
                 class="form-control @error('zip_code') is-invalid @enderror"
                 value="{{ old('zip_code', $propertyLocation->zip_code ?? '') }}"
                 placeholder="75201"
+                data-address-zip
                 maxlength="10"
                 required
             >
@@ -392,6 +398,7 @@
                 class="form-control @error('county') is-invalid @enderror"
                 value="{{ old('county', $propertyLocation->county ?? '') }}"
                 placeholder="Dallas County"
+                data-address-county
             >
 
             @error('county')
@@ -436,6 +443,7 @@
                 class="form-control @error('latitude') is-invalid @enderror"
                 value="{{ old('latitude', $propertyLocation->latitude ?? '') }}"
                 placeholder="32.7767000"
+                data-address-latitude
             >
 
             @error('latitude')
@@ -459,6 +467,7 @@
                 class="form-control @error('longitude') is-invalid @enderror"
                 value="{{ old('longitude', $propertyLocation->longitude ?? '') }}"
                 placeholder="-96.7970000"
+                data-address-longitude
             >
 
             @error('longitude')

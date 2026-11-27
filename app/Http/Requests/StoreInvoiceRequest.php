@@ -10,7 +10,7 @@ class StoreInvoiceRequest extends FormRequest
     // public function authorize(): bool
     // {
     //     return true;
-   // }
+    // }
 
     public function rules(): array
     {
@@ -25,19 +25,22 @@ class StoreInvoiceRequest extends FormRequest
             'property_id' => [
                 'nullable',
                 'integer',
-                'exists:properties,id',
+                Rule::exists('properties', 'id')
+                    ->where('customer_id', $this->input('customer_id')),
             ],
 
             'job_id' => [
                 'nullable',
                 'integer',
-                'exists:jobs,id',
+                Rule::exists('jobs', 'id')
+                    ->where('customer_id', $this->input('customer_id')),
             ],
 
             'estimate_id' => [
                 'nullable',
                 'integer',
-                'exists:crm_estimates,id',
+                Rule::exists('crm_estimates', 'id')
+                    ->where('customer_id', $this->input('customer_id')),
             ],
 
             'invoice_date' => [

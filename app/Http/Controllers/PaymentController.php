@@ -8,8 +8,8 @@ use App\Models\Payment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class PaymentController extends Controller
 {
@@ -60,34 +60,29 @@ class PaymentController extends Controller
 
             if ($balance <= 0) {
                 throw ValidationException::withMessages([
-                    'invoice_id' =>
-                        'This invoice has already been fully paid.',
+                    'invoice_id' => 'This invoice has already been fully paid.',
                 ]);
             }
 
             if ($amount > $balance) {
                 throw ValidationException::withMessages([
-                    'amount' =>
-                        'Payment exceeds the outstanding balance of ' .
-                        number_format($balance, 2) . '.',
+                    'amount' => 'Payment exceeds the outstanding balance of '.
+                        number_format($balance, 2).'.',
                 ]);
             }
 
             $payment = $invoice->payments()->create([
-                'payment_number' =>
-                    'PAY-' . Str::upper((string) Str::ulid()),
+                'payment_number' => 'PAY-'.Str::upper((string) Str::ulid()),
                 'amount' => $amount,
                 'payment_date' => $data['payment_date'],
                 'payment_method' => $data['payment_method'],
-                'reference_number' =>
-                    $data['reference_number'] ?? null,
+                'reference_number' => $data['reference_number'] ?? null,
                 'notes' => $data['notes'] ?? null,
                 'created_by' => $request->user()?->id,
             ]);
 
-            // If your schema has a dedicated payment_status
-            // column, synchronize it here. Avoid overwriting
-            // invoice workflow statuses without checking them.
+            $invoice->recalculateTotals();
+            $invoice->updatePaymentStatus();
 
             return $payment;
         });

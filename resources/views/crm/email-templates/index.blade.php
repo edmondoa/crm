@@ -6,7 +6,10 @@
 <div class="container-fluid py-4">
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
         <div><h1 class="h3 mb-1">Email Templates</h1><p class="text-muted mb-0">Create reusable messages for CRM communications.</p></div>
-        <a href="{{ route('crm.email-templates.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New template</a>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ route('crm.email-campaigns.index') }}" class="btn btn-outline-primary"><i class="bi bi-megaphone me-1"></i> Manage campaigns</a>
+            <a href="{{ route('crm.email-templates.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> New template</a>
+        </div>
     </div>
     @include('crm.email-templates.partials.alerts')
     <div class="card border-0 shadow-sm"><div class="card-body">

@@ -191,6 +191,7 @@
                     @foreach($jobs as $job)
 
                         <option value="{{ $job->id }}"
+                            data-customer-id="{{ $job->customer_id }}"
                             @selected(old('job_id', $invoice->job_id ?? '') == $job->id)>
 
                             {{ $job->job_number
