@@ -12,6 +12,7 @@ use App\Http\Controllers\Crm\JobController;
 use App\Http\Controllers\Crm\JobScheduleController;
 use App\Http\Controllers\Crm\PropertyController;
 use App\Http\Controllers\Crm\PropertyLocationController;
+use App\Http\Controllers\Crm\RecordImportController;
 use App\Http\Controllers\Crm\ReportController;
 use App\Http\Controllers\Crm\TaskController;
 use App\Http\Controllers\EstimateController;
@@ -44,6 +45,24 @@ Route::prefix('crm')->name('crm.')->group(function () {
         ->name('dashboard');
     Route::get('reports', [ReportController::class, 'index'])
         ->name('reports.index');
+    Route::get('customers/import/template', [
+        RecordImportController::class, 'customerTemplate',
+    ])->name('customers.import.template');
+    Route::get('customers/import', [
+        RecordImportController::class, 'customers',
+    ])->name('customers.import');
+    Route::post('customers/import', [
+        RecordImportController::class, 'importCustomers',
+    ])->name('customers.import.store');
+    Route::get('employees/import/template', [
+        RecordImportController::class, 'employeeTemplate',
+    ])->name('employees.import.template');
+    Route::get('employees/import', [
+        RecordImportController::class, 'employees',
+    ])->name('employees.import');
+    Route::post('employees/import', [
+        RecordImportController::class, 'importEmployees',
+    ])->name('employees.import.store');
 
     /*
     |--------------------------------------------------------------------------

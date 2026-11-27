@@ -23,6 +23,14 @@
         <div class="page-header-actions">
 
             <a
+                href="{{ route('crm.customers.import') }}"
+                class="btn btn-outline-primary"
+            >
+                <i class="bi bi-upload me-1"></i>
+                Import Customers
+            </a>
+
+            <a
                 href="{{ route('crm.customers.create') }}"
                 class="btn btn-primary"
             >

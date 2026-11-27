@@ -25,6 +25,14 @@
         <div class="page-header-actions">
 
             <a
+                href="{{ route('crm.employees.import') }}"
+                class="btn btn-outline-primary"
+            >
+                <i class="bi bi-upload me-1"></i>
+                Import Employees
+            </a>
+
+            <a
                 href="{{ route('crm.employees.create') }}"
                 class="btn btn-primary"
             >
