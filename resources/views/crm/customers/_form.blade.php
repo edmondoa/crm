@@ -356,9 +356,8 @@
                 class="form-control @error('address_line_1') is-invalid @enderror"
                 value="{{ old('address_line_1', $customer->address_line_1 ?? '') }}"
                 placeholder="123 Main Street"
-                data-google-places="address"
-                data-suggestions-url="{{ route('crm.google-places.autocomplete') }}"
-                data-details-url="{{ route('crm.google-places.details') }}"
+                data-location-autocomplete="address"
+                data-suggestions-url="{{ route('crm.location-suggestions') }}"
             >
 
             @error('address_line_1')

@@ -200,9 +200,8 @@
                 class="form-control @error('address_line_1') is-invalid @enderror"
                 value="{{ old('address_line_1', $propertyLocation->address_line_1 ?? '') }}"
                 placeholder="123 Main Street"
-                data-google-places="address"
-                data-suggestions-url="{{ route('crm.google-places.autocomplete') }}"
-                data-details-url="{{ route('crm.google-places.details') }}"
+                data-location-autocomplete="address"
+                data-suggestions-url="{{ route('crm.location-suggestions') }}"
                 required
             >
 
@@ -249,6 +248,7 @@
                 class="form-control @error('city') is-invalid @enderror"
                 value="{{ old('city', $propertyLocation->city ?? '') }}"
                 placeholder="Dallas"
+                data-address-city
                 required
             >
 
@@ -397,6 +397,7 @@
                 class="form-control @error('county') is-invalid @enderror"
                 value="{{ old('county', $propertyLocation->county ?? '') }}"
                 placeholder="Dallas County"
+                data-address-county
             >
 
             @error('county')

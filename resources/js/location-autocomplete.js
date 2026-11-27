@@ -1,6 +1,4 @@
-const autocompleteInputs = document.querySelectorAll('[data-google-places]');
-
-const makeSessionToken = () => crypto.randomUUID();
+const autocompleteInputs = document.querySelectorAll('[data-location-autocomplete]');
 
 function setFieldValue(form, selector, value) {
     if (value === null || value === undefined || value === '') {
@@ -13,9 +11,11 @@ function setFieldValue(form, selector, value) {
     }
 
     if (field instanceof HTMLSelectElement) {
-        const option = Array.from(field.options).find(
-            (item) => item.value.toLowerCase() === String(value).toLowerCase(),
-        );
+        const normalizedValue = String(value).toLowerCase();
+        const option = Array.from(field.options).find((item) => (
+            item.value.toLowerCase() === normalizedValue
+            || item.textContent.toLowerCase().includes(normalizedValue)
+        ));
         if (!option) {
             return;
         }
@@ -28,18 +28,17 @@ function setFieldValue(form, selector, value) {
 }
 
 function initializeAutocomplete(input, inputIndex) {
-    const isAddressField = input.dataset.googlePlaces === 'address';
+    const isAddressField = input.dataset.locationAutocomplete === 'address';
     const form = input.closest('form');
     const listbox = document.createElement('div');
     const status = document.createElement('div');
     let suggestions = [];
     let activeIndex = -1;
-    let sessionToken = null;
     let debounceTimeout;
     let activeRequest;
 
-    listbox.className = 'google-place-suggestions';
-    listbox.id = `google-place-list-${inputIndex}`;
+    listbox.className = 'location-suggestions';
+    listbox.id = `location-list-${inputIndex}`;
     listbox.setAttribute('role', 'listbox');
     listbox.hidden = true;
     input.insertAdjacentElement('afterend', listbox);
@@ -65,7 +64,7 @@ function initializeAutocomplete(input, inputIndex) {
     function showMessage(message) {
         listbox.replaceChildren();
         const messageRow = document.createElement('div');
-        messageRow.className = 'google-place-message';
+        messageRow.className = 'location-suggestion-message';
         messageRow.textContent = message;
         listbox.append(messageRow);
         listbox.hidden = false;
@@ -88,17 +87,17 @@ function initializeAutocomplete(input, inputIndex) {
             const secondaryText = document.createElement('span');
 
             option.type = 'button';
-            option.className = 'google-place-option';
+            option.className = 'location-suggestion-option';
             option.id = `${listbox.id}-option-${index}`;
             option.setAttribute('role', 'option');
             option.setAttribute('aria-selected', 'false');
 
-            mainText.className = 'google-place-main';
+            mainText.className = 'location-suggestion-main';
             mainText.textContent = suggestion.mainText || suggestion.text;
             option.append(mainText);
 
             if (suggestion.secondaryText) {
-                secondaryText.className = 'google-place-secondary';
+                secondaryText.className = 'location-suggestion-secondary';
                 secondaryText.textContent = suggestion.secondaryText;
                 option.append(secondaryText);
             }
@@ -112,14 +111,12 @@ function initializeAutocomplete(input, inputIndex) {
         });
 
         const attribution = document.createElement('div');
-        const logo = document.createElement('img');
-        attribution.className = 'google-place-attribution';
-        logo.src = 'https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3.png';
-        logo.alt = 'Powered by Google';
-        logo.width = 120;
-        logo.height = 14;
-        logo.loading = 'eager';
-        attribution.append(logo);
+        attribution.className = 'location-suggestion-attribution';
+        attribution.innerHTML = [
+            '<a href="https://photon.komoot.io/" target="_blank" rel="noreferrer">Search by Photon</a>',
+            '<span aria-hidden="true">·</span>',
+            '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors</a>',
+        ].join(' ');
         listbox.append(attribution);
         listbox.hidden = false;
         input.setAttribute('aria-expanded', 'true');
@@ -145,57 +142,33 @@ function initializeAutocomplete(input, inputIndex) {
         );
     }
 
-    async function selectSuggestion(suggestion) {
+    function selectSuggestion(suggestion) {
         input.value = suggestion.text || suggestion.mainText;
         closeSuggestions();
 
         if (!isAddressField) {
-            sessionToken = null;
             form?.requestSubmit();
             return;
         }
 
-        status.textContent = 'Loading the selected address.';
-
-        try {
-            const url = new URL(input.dataset.detailsUrl, window.location.origin);
-            url.searchParams.set('placeId', suggestion.placeId);
-            url.searchParams.set('sessionToken', sessionToken || makeSessionToken());
-
-            const response = await fetch(url, {
-                headers: { Accept: 'application/json' },
-                cache: 'no-store',
-            });
-            const details = await response.json();
-
-            if (!response.ok) {
-                throw new Error(details.message || 'Address details are unavailable.');
-            }
-
-            setFieldValue(form, '[name="address_line_1"]', details.addressLine1);
-            setFieldValue(form, '[data-address-city], [name="city"]', details.city);
-            setFieldValue(form, '[data-address-state], [name="state"]', details.state);
-            setFieldValue(form, '[data-address-zip], [name="zip_code"]', details.zipCode);
-            setFieldValue(form, '[data-address-country], [name="country"]', details.country);
-            setFieldValue(form, '[data-address-latitude], [name="latitude"]', details.latitude);
-            setFieldValue(form, '[data-address-longitude], [name="longitude"]', details.longitude);
-            status.textContent = 'Address fields filled from the selected location.';
-        } catch (error) {
-            status.textContent = error.message || 'Address details are unavailable.';
-        } finally {
-            sessionToken = null;
-        }
+        setFieldValue(form, '[name="address_line_1"]', suggestion.addressLine1);
+        setFieldValue(form, '[data-address-city], [name="city"]', suggestion.city);
+        setFieldValue(form, '[data-address-state], [name="state"]', suggestion.state);
+        setFieldValue(form, '[data-address-zip], [name="zip_code"]', suggestion.zipCode);
+        setFieldValue(form, '[data-address-county], [name="county"]', suggestion.county);
+        setFieldValue(form, '[data-address-country], [name="country"]', suggestion.country);
+        setFieldValue(form, '[data-address-latitude], [name="latitude"]', suggestion.latitude);
+        setFieldValue(form, '[data-address-longitude], [name="longitude"]', suggestion.longitude);
+        status.textContent = 'Address fields filled from the selected location.';
     }
 
     async function loadSuggestions(query) {
         activeRequest?.abort();
         activeRequest = new AbortController();
-        sessionToken ??= makeSessionToken();
-        status.textContent = 'Searching Google Maps.';
+        status.textContent = 'Searching OpenStreetMap locations.';
 
         const url = new URL(input.dataset.suggestionsUrl, window.location.origin);
         url.searchParams.set('input', query);
-        url.searchParams.set('sessionToken', sessionToken);
 
         try {
             const response = await fetch(url, {
@@ -238,7 +211,8 @@ function initializeAutocomplete(input, inputIndex) {
             setActiveOption(activeIndex + 1);
         } else if (event.key === 'ArrowUp' && !listbox.hidden) {
             event.preventDefault();
-            setActiveOption(activeIndex - 1);
+            const optionCount = listbox.querySelectorAll('[role="option"]').length;
+            setActiveOption(activeIndex < 0 ? optionCount - 1 : activeIndex - 1);
         } else if (event.key === 'Enter' && activeIndex >= 0) {
             event.preventDefault();
             selectSuggestion(suggestions[activeIndex]);

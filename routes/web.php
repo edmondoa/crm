@@ -13,9 +13,9 @@ use App\Http\Controllers\Crm\PropertyController;
 use App\Http\Controllers\Crm\PropertyLocationController;
 use App\Http\Controllers\Crm\TaskController;
 use App\Http\Controllers\EstimateController;
-use App\Http\Controllers\GooglePlacesController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\LocationAutocompleteController;
 use App\Http\Controllers\OpportunityController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
@@ -30,14 +30,9 @@ Route::get('dashboard', function () {
 Route::prefix('crm')->name('crm.')->group(function () {
 
     Route::get(
-        'google-places/autocomplete',
-        [GooglePlacesController::class, 'autocomplete']
-    )->middleware('throttle:30,1')->name('google-places.autocomplete');
-
-    Route::get(
-        'google-places/details',
-        [GooglePlacesController::class, 'details']
-    )->middleware('throttle:30,1')->name('google-places.details');
+        'location-suggestions',
+        [LocationAutocompleteController::class, 'suggestions']
+    )->middleware('throttle:30,1')->name('location-suggestions');
 
     Route::get('/', [DashboardController::class, 'index'])
         ->name('dashboard');
