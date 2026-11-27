@@ -24,7 +24,11 @@ class EmailCampaignManagementTest extends TestCase
         $this->get(route('crm.email-campaigns.create'))
             ->assertOk()
             ->assertSee('Create campaign plan')
-            ->assertSee($template->name);
+            ->assertSee($template->name)
+            ->assertSee('Birthday')
+            ->assertSee('New customers added')
+            ->assertSee('Pending invoices')
+            ->assertSee('Monthly invoices');
     }
 
     public function test_campaign_can_be_created_updated_and_deleted(): void
@@ -33,6 +37,7 @@ class EmailCampaignManagementTest extends TestCase
         $payload = [
             'name' => 'Spring service update',
             'email_template_id' => $template->id,
+            'target_type' => 'pending_invoices',
             'audience_description' => 'Existing customers',
             'status' => 'draft',
             'scheduled_at' => '',
@@ -46,6 +51,7 @@ class EmailCampaignManagementTest extends TestCase
             'id' => $campaign->id,
             'name' => 'Spring service update',
             'status' => 'draft',
+            'target_type' => 'pending_invoices',
             'audience_description' => 'Existing customers',
         ]);
 
@@ -72,6 +78,7 @@ class EmailCampaignManagementTest extends TestCase
         $payload = [
             'name' => 'Upcoming service update',
             'email_template_id' => $template->id,
+            'target_type' => 'birthday',
             'audience_description' => 'Active customers',
             'status' => 'scheduled',
             'notes' => '',

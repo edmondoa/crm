@@ -66,7 +66,7 @@
 
             <div class="table-responsive">
                 <table class="table align-middle">
-                    <thead><tr><th>Campaign</th><th>Template</th><th>Status</th><th>Planned date</th><th class="text-end">Actions</th></tr></thead>
+                    <thead><tr><th>Campaign</th><th>Template</th><th>Target</th><th>Status</th><th>Planned date</th><th class="text-end">Actions</th></tr></thead>
                     <tbody>
                     @forelse($campaigns as $campaign)
                         <tr>
@@ -75,6 +75,7 @@
                                 <small class="text-muted">{{ $campaign->audience_description ?: 'Audience not specified' }}</small>
                             </td>
                             <td>{{ $campaign->emailTemplate?->name ?? 'Template removed' }}</td>
+                            <td><span class="badge text-bg-light">{{ $campaign->target_label }}</span></td>
                             <td>
                                 @php
                                     $statusClass = match ($campaign->status) {
@@ -100,7 +101,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-5">
+                            <td colspan="6" class="text-center py-5">
                                 <i class="bi bi-megaphone fs-2 text-muted"></i>
                                 <p class="fw-semibold mt-2 mb-1">No campaigns yet</p>
                                 <p class="text-muted">Create a campaign plan and connect it to an email template.</p>

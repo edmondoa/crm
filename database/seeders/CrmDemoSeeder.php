@@ -686,6 +686,7 @@ class CrmDemoSeeder extends Seeder
             ['name' => 'Demo customer service update'],
             [
                 'email_template_id' => $template->id,
+                'target_type' => 'new_customers',
                 'audience_description' => 'Active residential customers',
                 'status' => 'draft',
                 'scheduled_at' => null,
@@ -699,6 +700,7 @@ class CrmDemoSeeder extends Seeder
             ['name' => 'Demo maintenance reminder plan'],
             [
                 'email_template_id' => $template->id,
+                'target_type' => 'pending_invoices',
                 'audience_description' => 'Customers with upcoming maintenance visits',
                 'status' => 'scheduled',
                 'scheduled_at' => now()->addDays(7)->startOfHour(),

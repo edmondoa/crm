@@ -1,1 +1,1 @@
-- [Campaign planning scope](campaign-planning-scope.md) — campaigns track drafts and planned dates only; do not send mail automatically unless requested.
+- [Campaign automation scope](campaign-planning-scope.md) — scheduled delivery and four audience targets are requested; confirm provider and eligible recipients before sending.

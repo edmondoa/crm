@@ -1,10 +1,10 @@
 ---
-name: Campaign planning scope
-description: The intended scope of email campaigns in this CRM.
+name: Campaign automation scope
+description: Campaign delivery intent and the target categories requested for the CRM.
 ---
 
-Email campaigns are planning records for drafts, audiences, and planned dates. They do not send emails or automatically contact CRM records unless the user later asks to add that capability.
+The user wants scheduled email campaigns to execute and requested target categories for birthdays, newly added customers, pending invoices, and monthly invoices.
 
-**Why:** The user chose campaign draft and schedule management rather than sending emails to customers.
+**Why:** The user explicitly asked for scheduled campaigns to be automated and then specified these audience targets.
 
-**How to apply:** Keep scheduled campaigns informational only; add delivery, recipient selection, or automated jobs only after the user explicitly requests them.
+**How to apply:** Before enabling delivery, confirm an email provider and exact eligible-recipient rules, including consent/unsubscribe handling. Never send seeded demo campaigns.

@@ -90,6 +90,7 @@ class EmailCampaignController extends Controller
         return $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'email_template_id' => ['required', 'integer', 'exists:email_templates,id'],
+            'target_type' => ['required', Rule::in(array_keys(EmailCampaign::TARGET_TYPES))],
             'audience_description' => ['nullable', 'string', 'max:1000'],
             'status' => ['required', Rule::in(self::STATUSES)],
             'scheduled_at' => $scheduledAtRules,
@@ -102,6 +103,7 @@ class EmailCampaignController extends Controller
         return [
             'campaign' => $campaign,
             'templates' => EmailTemplate::query()->orderBy('name')->get(),
+            'targetTypes' => EmailCampaign::TARGET_TYPES,
         ];
     }
 }
