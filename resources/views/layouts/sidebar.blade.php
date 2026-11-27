@@ -194,6 +194,10 @@
         <i class="bi bi-envelope-paper me-2"></i>
         Email Templates
     </a>
+    <a href="{{ route('crm.email-campaigns.index') }}" class="nav-link sidebar-link">
+        <i class="bi bi-megaphone me-2"></i>
+        Email Campaigns
+    </a>
 
 
 </div>

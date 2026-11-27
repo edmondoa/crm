@@ -1,0 +1,1 @@
+- [Campaign planning scope](campaign-planning-scope.md) — campaigns track drafts and planned dates only; do not send mail automatically unless requested.

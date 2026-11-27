@@ -5,6 +5,7 @@ use App\Http\Controllers\Crm\ContactController;
 use App\Http\Controllers\Crm\CustomerController;
 use App\Http\Controllers\Crm\DashboardController;
 use App\Http\Controllers\Crm\EmailTemplateController;
+use App\Http\Controllers\Crm\EmailCampaignController;
 use App\Http\Controllers\Crm\EmployeeController;
 use App\Http\Controllers\Crm\JobAssignmentController;
 use App\Http\Controllers\Crm\JobController;
@@ -250,5 +251,11 @@ Route::prefix('crm')->name('crm.')->group(function () {
     Route::get('email-templates/{email_template}/edit', [EmailTemplateController::class, 'edit'])->name('email-templates.edit');
     Route::put('email-templates/{email_template}', [EmailTemplateController::class, 'update'])->name('email-templates.update');
     Route::delete('email-templates/{email_template}', [EmailTemplateController::class, 'destroy'])->name('email-templates.destroy');
+    Route::get('email-campaigns', [EmailCampaignController::class, 'index'])->name('email-campaigns.index');
+    Route::get('email-campaigns/create', [EmailCampaignController::class, 'create'])->name('email-campaigns.create');
+    Route::post('email-campaigns', [EmailCampaignController::class, 'store'])->name('email-campaigns.store');
+    Route::get('email-campaigns/{email_campaign}/edit', [EmailCampaignController::class, 'edit'])->name('email-campaigns.edit');
+    Route::put('email-campaigns/{email_campaign}', [EmailCampaignController::class, 'update'])->name('email-campaigns.update');
+    Route::delete('email-campaigns/{email_campaign}', [EmailCampaignController::class, 'destroy'])->name('email-campaigns.destroy');
 
 });
