@@ -71,6 +71,7 @@ class Invoice extends Model
             'invoice_id'
         )->orderBy('sort_order');
     }
+
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
@@ -90,11 +91,12 @@ class Invoice extends Model
             + $tax
             + (float) $this->other_charges;
 
-        $amountPaid = (float) $this->amount_paid;
+        $amountPaid = (float) $this->payments()->sum('amount');
 
         $this->subtotal = $subtotal;
         $this->discount = $discount;
         $this->tax = $tax;
+        $this->amount_paid = $amountPaid;
         $this->grand_total = $grandTotal;
         $this->balance_due = max(
             $grandTotal - $amountPaid,
@@ -110,15 +112,20 @@ class Invoice extends Model
             return;
         }
 
-        if ($this->amount_paid >= $this->grand_total) {
+        if (
+            (float) $this->grand_total > 0
+            && (float) $this->amount_paid >= (float) $this->grand_total
+        ) {
             $this->status = 'paid';
         } elseif ($this->amount_paid > 0) {
             $this->status = 'partial';
         } elseif (
             $this->due_date &&
-            $this->due_date->isPast()
+            $this->due_date->isBefore(today())
         ) {
             $this->status = 'overdue';
+        } elseif (in_array($this->status, ['paid', 'partial', 'overdue'], true)) {
+            $this->status = 'sent';
         }
 
         $this->save();
@@ -126,7 +133,7 @@ class Invoice extends Model
 
     public function getPaidAmountAttribute(): float
     {
-        return (float) $this->payments()->sum('amount');
+        return (float) ($this->attributes['paid_amount'] ?? $this->amount_paid ?? 0);
     }
 
     public function getBalanceAttribute(): float

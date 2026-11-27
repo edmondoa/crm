@@ -25,6 +25,14 @@
     </td>
 
     <td>
+        @if(!empty($item->id))
+            <input
+                type="hidden"
+                name="items[{{ $index }}][id]"
+                value="{{ $item->id }}"
+            >
+        @endif
+
         <input
             type="text"
             name="items[{{ $index }}][description]"
@@ -38,6 +46,11 @@
             type="hidden"
             name="items[{{ $index }}][sku]"
             value="{{ old("items.$index.sku", $item->sku ?? '') }}"
+        >
+        <input
+            type="hidden"
+            name="items[{{ $index }}][notes]"
+            value="{{ old("items.$index.notes", $item->notes ?? '') }}"
         >
     </td>
 
@@ -108,7 +121,7 @@
     <td>
         <button
             type="button"
-            class="btn btn-sm btn-outline-danger remove-item"
+            class="btn btn-sm btn-outline-danger remove-invoice-item"
             title="Remove"
         >
             <i class="bi bi-trash"></i>

@@ -399,10 +399,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const propertySelect =
         document.getElementById('property_id');
 
+    const jobSelect =
+        document.getElementById('job_id');
 
-    function filterProperties() {
+    function filterCustomerOptions(select) {
 
-        if (!customerSelect || !propertySelect) {
+        if (!customerSelect || !select) {
             return;
         }
 
@@ -411,7 +413,7 @@ document.addEventListener('DOMContentLoaded', function () {
             customerSelect.value;
 
 
-        Array.from(propertySelect.options)
+        Array.from(select.options)
             .forEach(function (option) {
 
                 if (!option.value) {
@@ -432,8 +434,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         const selected =
-            propertySelect.options[
-                propertySelect.selectedIndex
+            select.options[
+                select.selectedIndex
             ];
 
 
@@ -443,9 +445,16 @@ document.addEventListener('DOMContentLoaded', function () {
             selected.hidden
         ) {
 
-            propertySelect.value = '';
+            select.value = '';
 
         }
+
+    }
+
+    function filterProperties() {
+
+        filterCustomerOptions(propertySelect);
+        filterCustomerOptions(jobSelect);
 
     }
 
