@@ -66,7 +66,7 @@
 
             <div class="table-responsive">
                 <table class="table align-middle">
-                    <thead><tr><th>Campaign</th><th>Template</th><th>Target</th><th>Status</th><th>Planned date</th><th class="text-end">Actions</th></tr></thead>
+                    <thead><tr><th>Campaign</th><th>Template</th><th>Campaign type</th><th>Status</th><th>Planned date</th><th class="text-end">Actions</th></tr></thead>
                     <tbody>
                     @forelse($campaigns as $campaign)
                         <tr>

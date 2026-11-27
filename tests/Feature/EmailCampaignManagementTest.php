@@ -24,6 +24,7 @@ class EmailCampaignManagementTest extends TestCase
         $this->get(route('crm.email-campaigns.create'))
             ->assertOk()
             ->assertSee('Create campaign plan')
+            ->assertSee('Campaign type')
             ->assertSee($template->name)
             ->assertSee('Birthday')
             ->assertSee('New customers added')

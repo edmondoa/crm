@@ -36,7 +36,7 @@
                         @endif
                     </div>
                     <div class="col-12">
-                        <label class="form-label" for="target_type">Target campaign to <span class="text-danger">*</span></label>
+                        <label class="form-label" for="target_type">Campaign type <span class="text-danger">*</span></label>
                         <select id="target_type" name="target_type" class="form-select" required>
                             @foreach($targetTypes as $value => $label)
                                 <option value="{{ $value }}" @selected(old('target_type', $campaign->target_type ?? 'general') === $value)>{{ $label }}</option>
@@ -47,7 +47,7 @@
                     <div class="col-12">
                         <label class="form-label" for="audience_description">Planned audience</label>
                         <textarea id="audience_description" name="audience_description" class="form-control" rows="2" maxlength="1000" placeholder="Describe who this campaign is intended for">{{ old('audience_description', $campaign->audience_description) }}</textarea>
-                        <div class="form-text">Describe the audience details. Target categories are saved with the campaign, but do not select or contact CRM records yet.</div>
+                        <div class="form-text">Describe the intended audience. Campaign type is saved with the campaign, but it does not select or contact CRM records yet.</div>
                         @error('audience_description')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6">
@@ -68,9 +68,9 @@
 
     <div class="col-xl-4">
         <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white py-3"><h2 class="h6 mb-0">Targeting options</h2></div>
+            <div class="card-header bg-white py-3"><h2 class="h6 mb-0">Campaign type behavior</h2></div>
             <div class="card-body">
-                <p class="text-muted mb-0">Birthday, new-customer, pending-invoice, and monthly-invoice targets are stored as campaign criteria. Recipient matching and email delivery are not active yet.</p>
+                <p class="text-muted mb-0">Birthday, new customers added, pending invoices, and monthly invoices are available campaign types. Recipient matching and email delivery are not active yet.</p>
             </div>
         </div>
     </div>
