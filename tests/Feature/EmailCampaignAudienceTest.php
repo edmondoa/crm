@@ -128,7 +128,7 @@ class EmailCampaignAudienceTest extends TestCase
         $this->assertNotNull($birthdayCustomer->id);
     }
 
-    public function test_customer_can_save_a_date_of_birth_for_birthday_matching(): void
+    public function test_customer_can_save_email_and_date_of_birth_without_welcome_email_failure(): void
     {
         $dateOfBirth = today()->subYears(25)->toDateString();
 
@@ -136,6 +136,7 @@ class EmailCampaignAudienceTest extends TestCase
             'customer_type' => 'individual',
             'first_name' => 'Birthday',
             'last_name' => 'Customer',
+            'email' => 'birthday-customer@example.test',
             'date_of_birth' => $dateOfBirth,
             'country' => 'United States',
             'status' => 'active',
@@ -143,6 +144,7 @@ class EmailCampaignAudienceTest extends TestCase
 
         $customer = Customer::query()->where('first_name', 'Birthday')->firstOrFail();
         $this->assertSame($dateOfBirth, $customer->date_of_birth->toDateString());
+        $this->assertSame('birthday-customer@example.test', $customer->email);
     }
 
     private function createCustomer(array $overrides = []): Customer
@@ -152,16 +154,14 @@ class EmailCampaignAudienceTest extends TestCase
         $updatedAt = $overrides['updated_at'] ?? null;
         unset($overrides['created_at'], $overrides['updated_at']);
 
-        $customer = Customer::withoutEvents(function () use ($suffix, $overrides) {
-            return Customer::query()->create(array_merge([
-                'customer_code' => 'AUD-'.$suffix,
-                'customer_type' => 'individual',
-                'first_name' => 'Test',
-                'last_name' => 'Customer',
-                'email' => 'audience-'.$suffix.'@example.test',
-                'status' => 'active',
-            ], $overrides));
-        });
+        $customer = Customer::query()->create(array_merge([
+            'customer_code' => 'AUD-'.$suffix,
+            'customer_type' => 'individual',
+            'first_name' => 'Test',
+            'last_name' => 'Customer',
+            'email' => 'audience-'.$suffix.'@example.test',
+            'status' => 'active',
+        ], $overrides));
 
         if ($createdAt || $updatedAt) {
             $timestamps = array_filter([
