@@ -12,6 +12,7 @@ use App\Http\Controllers\Crm\JobController;
 use App\Http\Controllers\Crm\JobScheduleController;
 use App\Http\Controllers\Crm\PropertyController;
 use App\Http\Controllers\Crm\PropertyLocationController;
+use App\Http\Controllers\Crm\ReportController;
 use App\Http\Controllers\Crm\TaskController;
 use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\InvoiceController;
@@ -41,6 +42,8 @@ Route::prefix('crm')->name('crm.')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])
         ->name('dashboard');
+    Route::get('reports', [ReportController::class, 'index'])
+        ->name('reports.index');
 
     /*
     |--------------------------------------------------------------------------

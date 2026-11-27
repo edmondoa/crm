@@ -47,6 +47,10 @@
         <i class="bi bi-kanban"></i>
         <span>Sales Pipeline</span>
     </a>
+    <a href="{{ route('crm.reports.index') }}" class="sidebar-link {{ request()->routeIs('crm.reports.*') ? 'active' : '' }}">
+        <i class="bi bi-file-earmark-bar-graph"></i>
+        <span>Reports</span>
+    </a>
 
     <a href="#" class="sidebar-link disabled">
         <i class="bi bi-file-earmark-text"></i>
