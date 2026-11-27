@@ -33,6 +33,10 @@ Route::prefix('crm')->name('crm.')->group(function () {
         'location-suggestions',
         [LocationAutocompleteController::class, 'suggestions']
     )->middleware('throttle:30,1')->name('location-suggestions');
+    Route::post(
+        'location-details',
+        [LocationAutocompleteController::class, 'details']
+    )->middleware('throttle:30,1')->name('location-details');
 
     Route::get('/', [DashboardController::class, 'index'])
         ->name('dashboard');

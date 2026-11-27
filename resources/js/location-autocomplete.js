@@ -1,11 +1,12 @@
 const autocompleteInputs = document.querySelectorAll('[data-location-autocomplete]');
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
 function setFieldValue(form, selector, value) {
     if (value === null || value === undefined || value === '') {
         return;
     }
 
-    const field = form.querySelector(selector);
+    const field = form?.querySelector(selector);
     if (!field) {
         return;
     }
@@ -36,6 +37,7 @@ function initializeAutocomplete(input, inputIndex) {
     let activeIndex = -1;
     let debounceTimeout;
     let activeRequest;
+    let sessionToken = null;
 
     listbox.className = 'location-suggestions';
     listbox.id = `location-list-${inputIndex}`;
@@ -69,6 +71,17 @@ function initializeAutocomplete(input, inputIndex) {
         listbox.append(messageRow);
         listbox.hidden = false;
         input.setAttribute('aria-expanded', 'true');
+    }
+
+    function appendAttribution() {
+        const attribution = document.createElement('div');
+        const text = document.createElement('span');
+
+        attribution.className = 'location-suggestion-attribution';
+        text.textContent = 'Google Maps';
+        text.setAttribute('translate', 'no');
+        attribution.append(text);
+        listbox.append(attribution);
     }
 
     function renderSuggestions(items) {
@@ -110,14 +123,7 @@ function initializeAutocomplete(input, inputIndex) {
             listbox.append(option);
         });
 
-        const attribution = document.createElement('div');
-        attribution.className = 'location-suggestion-attribution';
-        attribution.innerHTML = [
-            '<a href="https://photon.komoot.io/" target="_blank" rel="noreferrer">Search by Photon</a>',
-            '<span aria-hidden="true">·</span>',
-            '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors</a>',
-        ].join(' ');
-        listbox.append(attribution);
+        appendAttribution();
         listbox.hidden = false;
         input.setAttribute('aria-expanded', 'true');
         status.textContent = `${suggestions.length} location suggestions available.`;
@@ -142,33 +148,65 @@ function initializeAutocomplete(input, inputIndex) {
         );
     }
 
-    function selectSuggestion(suggestion) {
-        input.value = suggestion.text || suggestion.mainText;
-        closeSuggestions();
-
+    async function selectSuggestion(suggestion) {
         if (!isAddressField) {
+            input.value = suggestion.text || suggestion.mainText;
+            closeSuggestions();
             form?.requestSubmit();
             return;
         }
 
-        setFieldValue(form, '[name="address_line_1"]', suggestion.addressLine1);
-        setFieldValue(form, '[data-address-city], [name="city"]', suggestion.city);
-        setFieldValue(form, '[data-address-state], [name="state"]', suggestion.state);
-        setFieldValue(form, '[data-address-zip], [name="zip_code"]', suggestion.zipCode);
-        setFieldValue(form, '[data-address-county], [name="county"]', suggestion.county);
-        setFieldValue(form, '[data-address-country], [name="country"]', suggestion.country);
-        setFieldValue(form, '[data-address-latitude], [name="latitude"]', suggestion.latitude);
-        setFieldValue(form, '[data-address-longitude], [name="longitude"]', suggestion.longitude);
-        status.textContent = 'Address fields filled from the selected location.';
+        closeSuggestions();
+        status.textContent = 'Loading the selected address.';
+
+        try {
+            const response = await fetch(input.dataset.detailsUrl, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
+                },
+                body: JSON.stringify({
+                    place_id: suggestion.placeId,
+                    session_token: sessionToken,
+                }),
+            });
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Unable to load this address.');
+            }
+
+            input.value = result.formattedAddress || suggestion.text;
+            setFieldValue(form, '[name="address_line_1"]', result.addressLine1);
+            setFieldValue(form, '[data-address-city], [name="city"]', result.city);
+            setFieldValue(form, '[data-address-state], [name="state"]', result.state);
+            setFieldValue(form, '[data-address-zip], [name="zip_code"]', result.zipCode);
+            setFieldValue(form, '[data-address-county], [name="county"]', result.county);
+            setFieldValue(form, '[data-address-country], [name="country"]', result.country);
+            setFieldValue(form, '[data-address-latitude], [name="latitude"]', result.latitude);
+            setFieldValue(form, '[data-address-longitude], [name="longitude"]', result.longitude);
+            sessionToken = null;
+            status.textContent = 'Address fields filled from the selected Google Maps result.';
+        } catch (error) {
+            sessionToken = null;
+            showMessage(error.message || 'Unable to load this address.');
+            status.textContent = error.message || 'Unable to load this address.';
+        }
     }
 
     async function loadSuggestions(query) {
         activeRequest?.abort();
         activeRequest = new AbortController();
-        status.textContent = 'Searching OpenStreetMap locations.';
+        status.textContent = 'Searching Google Maps locations.';
 
         const url = new URL(input.dataset.suggestionsUrl, window.location.origin);
         url.searchParams.set('input', query);
+        url.searchParams.set('mode', isAddressField ? 'address' : 'search');
+        if (isAddressField) {
+            url.searchParams.set('session_token', sessionToken);
+        }
 
         try {
             const response = await fetch(url, {
@@ -199,7 +237,12 @@ function initializeAutocomplete(input, inputIndex) {
         if (query.length < 3) {
             closeSuggestions();
             status.textContent = '';
+            sessionToken = null;
             return;
+        }
+
+        if (isAddressField && !sessionToken) {
+            sessionToken = crypto.randomUUID();
         }
 
         debounceTimeout = window.setTimeout(() => loadSuggestions(query), 300);

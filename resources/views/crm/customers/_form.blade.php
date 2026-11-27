@@ -358,6 +358,7 @@
                 placeholder="123 Main Street"
                 data-location-autocomplete="address"
                 data-suggestions-url="{{ route('crm.location-suggestions') }}"
+                data-details-url="{{ route('crm.location-details') }}"
             >
 
             @error('address_line_1')
